@@ -1,14 +1,12 @@
 #include "../include/SidePanel.hpp"
 #include "../include/ConsoleViewport.hpp"
 
-SidePanel::SidePanel(const ConsoleViewport& viewport) 
-    : height_(viewport.height() / 3), 
-      width_(viewport.width() / 3),
-      sidePanelWin_(newwin(height_, width_, (viewport.height() / 2) - (height_ / 2), (viewport.width() / 2) / 3)),
+SidePanel::SidePanel(int height, int width, WINDOW* parent) 
+    : height_(height), 
+      width_(width),
+      sidePanelWin_(derwin(parent, height_, width_, height, width / 2)),
       score_(0), level_(0)
-{
-    box(sidePanelWin_, 0, 0);
-}
+{}
 
 SidePanel::~SidePanel() {
     delwin(sidePanelWin_);
@@ -20,5 +18,9 @@ void SidePanel::render() {
     wrefresh(sidePanelWin_);
 }
 
-int SidePanel::score() const { return score_;}
-int SidePanel::level() const { return level_;}
+void SidePanel::reset() {
+    box(sidePanelWin_, 0, 0);
+    wrefresh(sidePanelWin_);
+    score_ = 0;
+    level_ = 0;
+}

@@ -3,9 +3,10 @@
 
 Game::Game()
     : viewport_(),
-      sidePanel_(viewport_),
-      field_(viewport_),
-      platform_(field_),
+      gameWindow_(viewport_),
+      field_(gameWindow_.gameField()),
+      sidePanel_(gameWindow_.sidePanel()),
+      platform_(gameWindow_.gameField()),
       ball_(platform_),
       inputHandler_(field_.fieldWin()),
       gameOverScreen_(viewport_, sidePanel_),
@@ -19,13 +20,17 @@ void Game::input() {
 void Game::run() {
     viewport_.initialize();
     inputHandler_.setNonBlocking(true);
-    while (running_) {
-        input();
-        update();
-        render();
+    do {
+        running_ = true;
+        reset();
+        while (running_) {
+            input();
+            update();
+            render();
+        }
+        gameOverScreen_.render();
     }
-    gameOverScreen_.render();
-    std::cin.get();
+    while (!gameOverScreen_.isGameOver());
 }
 
 void Game::update() {
@@ -37,8 +42,15 @@ void Game::update() {
 }
 
 void Game::render() {
-    sidePanel_.render();
-    field_.render();
+    gameWindow_.render();
+    // sidePanel_.render();
+    // field_.render();
     platform_.render(field_);
     ball_.render(field_);
+}
+
+void Game::reset() {
+    platform_.reset(field_);
+    ball_.reset(platform_);
+    gameWindow_.reset();
 }

@@ -19,8 +19,9 @@ public:
     Ball(const Platform& platform);
     void setDirection(const GameField& field, const Platform& platform);
     void move();
+    void reset(const Platform& platform);
     void render(const GameField& field) const;
-    bool isBallLost() const;
+    bool isBallLost() const { return isBallLost_; };
 private:
 // Collision detection block
     enum class Collision {
@@ -53,7 +54,8 @@ private:
     void checkCollision(const GameField& field, const Platform& platform);
     template <typename ... Args>
     static bool hasCollision(Collision mask, Args ... args);
-private:
+    void checkPlatformCollision(const GameField& field, const Platform& platform, int posY, int posX, chtype& cellVert, chtype& cellHoriz);
+
     int posY_;
     int posX_;
     bool isMoving_;

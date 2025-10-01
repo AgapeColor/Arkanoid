@@ -4,16 +4,21 @@
 #include <ncurses.h>
 
 class ConsoleViewport;
+class GameWindow;
 
 class GameField {
 public:
-    GameField(const ConsoleViewport& viewport);
+    GameField(int height, int width, WINDOW* parent, int ownerWidth);
+    GameField(const GameField& obj) = delete;
+    GameField& operator=(const GameField& obj) = delete;
+    GameField(GameField&& obj) = delete;
+    GameField& operator=(GameField&& obj) = delete;
     ~GameField();
     void render();
-    // Getters
-    int height() const;
-    int width() const;
-    WINDOW* fieldWin() const;
+    void reset();
+    int height() const { return height_; };
+    int width() const { return width_; };
+    WINDOW* fieldWin() const { return fieldWin_; };
     chtype cell(int y, int x) const;
 private:
     int height_;

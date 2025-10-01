@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ConsoleViewport.hpp"
+#include "GameWindow.hpp"
 #include "GameField.hpp"
 #include "SidePanel.hpp"
 #include "Platform.hpp"
@@ -14,8 +15,9 @@ public:
     void run();
 private:
     ConsoleViewport viewport_;
-    GameField field_;
-    SidePanel sidePanel_;
+    GameWindow gameWindow_;
+    GameField& field_;
+    SidePanel& sidePanel_;
     Platform platform_;
     Ball ball_;
     InputHandler inputHandler_;
@@ -25,4 +27,5 @@ private:
     void input();
     void update();
     void render();
+    void reset();
 };

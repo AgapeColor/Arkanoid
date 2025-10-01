@@ -6,13 +6,12 @@ class ConsoleViewport;
 
 class SidePanel {
 public:
-    SidePanel(const ConsoleViewport& viewport);
+    SidePanel(int height, int width, WINDOW* parent);
     ~SidePanel();
     void render();
-
-    // Getters
-    int score() const;
-    int level() const;
+    void reset();
+    int score() const { return score_; };
+    int level() const { return level_; };
 private:
     int height_;
     int width_;

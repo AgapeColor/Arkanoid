@@ -1,12 +1,13 @@
 #include <stdexcept>
 #include <algorithm>
 #include "../include/ConsoleViewport.hpp"
+#include "../include/GameWindow.hpp"
 #include "../include/GameField.hpp"
 
-GameField::GameField(const ConsoleViewport& viewport) 
-    : height_(viewport.height() - 2),
-      width_(viewport.width() / 2.2),
-      fieldWin_(newwin(height_, width_, 2, viewport.width() / 2)),
+GameField::GameField(int height, int width, WINDOW* parent, int ownerWidth) 
+    : height_(height),
+      width_(width),
+      fieldWin_(derwin(parent, height_, width_, 1, ownerWidth / 2)),
       field_(height_, std::vector<chtype>(width_, ' ')),
       clearLine(width_ - 2, ' '),
       hasBorders(false)
@@ -28,7 +29,8 @@ void GameField::render() {
             waddchnstr(fieldWin_, field_[y].data(), width_);
         }
         hasBorders = true;
-    } else {
+    } 
+    else {
         for (int y = 1; y < height_ - 1; ++y) {
             wmove(fieldWin_, y, 1);
             waddchnstr(fieldWin_, clearLine.data(), width_ - 1);
@@ -37,12 +39,11 @@ void GameField::render() {
     wrefresh(fieldWin_);
 }
 
-// Getters
-int GameField::height() const { return height_; }
-
-int GameField::width() const { return width_; }
-
-WINDOW* GameField::fieldWin() const { return fieldWin_; }
+void GameField::reset() {
+    for (auto& row : field_)
+        std::fill(row.begin(), row.end(), ' ');
+    setFieldBorders();
+}
 
 chtype GameField::cell(int y, int x) const {
     if (y < 0 || y >= height_ || x < 0 || x >= width_)

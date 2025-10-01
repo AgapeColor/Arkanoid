@@ -9,13 +9,17 @@ class Platform {
 public:
     enum class Direction {stop, left, right};
     Platform(const GameField& field);
-    void render(const GameField& field) const;
+    Platform(const Platform&) = delete;
+    Platform& operator=(const Platform&) = delete;
+    Platform(Platform&&) = delete;
+    Platform& operator=(Platform&&) = delete;
     void move(const GameField& field, int dir);
-    // Getters
-    int posX() const;
-    int posY() const;
-    int width() const;
-    Direction movement() const { return movement_; }
+    void render(const GameField& field) const;
+    void reset(const GameField& field);
+    int posX() const { return posX_; };
+    int posY() const { return posY_; };
+    int width() const { return width_; };
+    Direction movement() const { return movement_; };
 private:
     int width_;
     int posY_;

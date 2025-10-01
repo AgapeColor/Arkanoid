@@ -1,5 +1,6 @@
 #include <ncurses.h>
 #include <stdexcept>
+#include <algorithm>
 #include "../include/ConsoleViewport.hpp"
 
 ConsoleViewport::ConsoleViewport(int marginY, int marginX)
@@ -10,9 +11,6 @@ ConsoleViewport::ConsoleViewport(int marginY, int marginX)
 {
     initscr();
     curs_set(0);
-    //noecho();
-    //cbreak();
-    //keypad(stdscr, true);
     detectWindowSize();
 }
 
@@ -26,8 +24,8 @@ void ConsoleViewport::detectWindowSize() {
     if (rawRows < 1 || rawCols < 1) {
         throw std::runtime_error("ConsoleViewport: invalid window size");
     }
-    rows_ = rawRows - 2 * marginY_;
-    cols_ = rawCols - 2 * marginX_;
+    rows_ = std::max(1, rawRows - 2 * marginY_);
+    cols_ = std::max(1, rawCols - 2 * marginX_);
 }
 
 void ConsoleViewport::initialize() const {
@@ -35,6 +33,3 @@ void ConsoleViewport::initialize() const {
     box(stdscr, 0, 0);
     refresh();
  }
-
-int ConsoleViewport::height() const { return rows_; }
-int ConsoleViewport::width() const { return cols_; }

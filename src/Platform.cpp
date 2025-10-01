@@ -38,6 +38,9 @@ void Platform::render(const GameField& field) const {
         mvwhline(field.fieldWin(), posY_, posX_ + width_, ' ', 2); */
 }
 
-int Platform::posX() const { return posX_; }
-int Platform::posY() const { return posY_; }
-int Platform::width() const { return width_; }
+void Platform::reset(const GameField& field) {
+    width_ = field.width() / 5;
+    posY_ = field.height() - 3;
+    posX_ = (field.width() / 2) - width_ / 2;
+    movement_ = Direction::stop;
+}

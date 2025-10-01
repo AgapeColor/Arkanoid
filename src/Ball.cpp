@@ -133,8 +133,14 @@ void Ball::render(const GameField& field) const {
   mvwaddch(field.fieldWin(), posY_, posX_, 'O');
 }
 
-bool Ball::isBallLost() const {
-    return isBallLost_;
+void Ball::reset(const Platform& platform) {
+      posY_= platform.posY() - 1;
+      posX_= platform.posX() + platform.width() / 2;
+      isMoving_= false;
+      movement_ = Direction::stop;
+      collisionMask_= Collision::none;
+      lastMove_= std::chrono::steady_clock::now();
+      isBallLost_= false;
 }
 
 void Ball::checkCollision(const GameField& field, const Platform& platform) {
@@ -149,6 +155,9 @@ void Ball::checkCollision(const GameField& field, const Platform& platform) {
   chtype cellVert = field.cell(posY_ + dir.y, posX_);
   chtype cellHoriz = field.cell(posY_, posX_ + dir.x);
 
+  if ((movement_ == Ball::Direction::leftDown || movement_ == Ball::Direction::rightDown) && posY_ == field.height() - 4)
+    checkPlatformCollision(field, platform, posY_ + dir.y, posX_ + dir.x, cellVert, cellHoriz);
+
   if (cellVert != ' ' && cellHoriz == ' ')
     collisionMask_ |= dir.vert;
   else if (cellVert != ' ' && cellHoriz != ' ')
@@ -157,8 +166,26 @@ void Ball::checkCollision(const GameField& field, const Platform& platform) {
     collisionMask_ |= dir.horiz;
 }
 
-template <typename... Args>
-inline bool Ball::hasCollision(Collision mask, Args... args) {
-    Collision combined = (Collision::none | ... | args);
-    return mask == combined;
-}
+  template <typename... Args>
+  inline bool Ball::hasCollision(Collision mask, Args... args) {
+      Collision combined = (Collision::none | ... | args);
+      return mask == combined;
+  }
+
+  void Ball::checkPlatformCollision(const GameField& field, const Platform& platform, int posY, int posX, chtype& cellVert, chtype& cellHoriz) {
+
+    if (posY == platform.posY()) {
+      if (posX == platform.posX()) {
+        cellVert = ACS_HLINE;
+        if (movement_ == Ball::Direction::rightDown)
+          cellHoriz = ACS_VLINE;
+      }
+      else if (posX == platform.posX() + platform.width() - 1) {
+        cellVert = ACS_HLINE;
+        if (movement_ == Ball::Direction::leftDown)
+          cellHoriz = ACS_VLINE;
+      }
+      else if (posX > platform.posX() && posX < (platform.posX() + platform.width() - 1))
+        cellVert = ACS_HLINE;
+    }
+  }
