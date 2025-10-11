@@ -10,6 +10,8 @@ ConsoleViewport::ConsoleViewport(int marginY, int marginX)
        marginX_(marginX)
 {
     initscr();
+    noecho();
+    cbreak();
     curs_set(0);
     detectWindowSize();
 }

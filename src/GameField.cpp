@@ -12,9 +12,6 @@ GameField::GameField(int height, int width, WINDOW* parent, int ownerWidth)
       clearLine(width_ - 2, ' '),
       hasBorders(false)
 {
-    noecho();
-    cbreak();
-    keypad(fieldWin_, true);
     setFieldBorders();
 }
 

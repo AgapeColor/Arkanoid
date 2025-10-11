@@ -19,7 +19,6 @@ add_executable(arkanoid
     src/SidePanel.cpp
     src/Platform.cpp
     src/Ball.cpp
-    src/InputHandler.cpp
     src/GameOverScreen.cpp
     src/GameWindow.cpp
 )
