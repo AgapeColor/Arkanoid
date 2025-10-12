@@ -4,10 +4,10 @@
 #include "../include/GameWindow.hpp"
 #include "../include/GameField.hpp"
 
-GameField::GameField(int height, int width, WINDOW* parent, int ownerWidth) 
-    : height_(height),
-      width_(width),
-      fieldWin_(derwin(parent, height_, width_, 1, ownerWidth / 2)),
+GameField::GameField(ncui::Window fieldWin) 
+    : fieldWin_(std::move(fieldWin)),
+      height_(fieldWin_.height()),
+      width_(fieldWin_.width()),
       field_(height_, std::vector<chtype>(width_, ' ')),
       clearLine(width_ - 2, ' '),
       hasBorders(false)
@@ -15,25 +15,21 @@ GameField::GameField(int height, int width, WINDOW* parent, int ownerWidth)
     setFieldBorders();
 }
 
-GameField::~GameField() {
-    delwin(fieldWin_);
-}
-
 void GameField::render() {
     if (!hasBorders) {
         for (int y = 0; y < height_; ++y) {
-            wmove(fieldWin_, y, 0);
-            waddchnstr(fieldWin_, field_[y].data(), width_);
+            wmove(fieldWin_.get(), y, 0);
+            waddchnstr(fieldWin_.get(), field_[y].data(), width_);
         }
         hasBorders = true;
     } 
     else {
         for (int y = 1; y < height_ - 1; ++y) {
-            wmove(fieldWin_, y, 1);
-            waddchnstr(fieldWin_, clearLine.data(), width_ - 1);
+            wmove(fieldWin_.get(), y, 1);
+            waddchnstr(fieldWin_.get(), clearLine.data(), width_ - 1);
         }
     }
-    wrefresh(fieldWin_);
+    wrefresh(fieldWin_.get());
 }
 
 void GameField::reset() {
@@ -70,5 +66,5 @@ void GameField::setFieldBorders() {
         field_[y][L] = ACS_VLINE;
         field_[y][R] = ACS_VLINE;
     }   
-    box(fieldWin_, 0, 0);
+    box(fieldWin_.get(), 0, 0);
 }

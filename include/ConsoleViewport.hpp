@@ -8,6 +8,7 @@ public:
     ConsoleViewport(ConsoleViewport&& obj) = delete;
     ConsoleViewport& operator=(ConsoleViewport&& obj) = delete;
     ~ConsoleViewport();
+    
     void initialize() const;
     int height() const { return rows_; }
     int width() const { return cols_; }

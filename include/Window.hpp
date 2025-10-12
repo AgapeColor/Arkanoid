@@ -29,12 +29,16 @@ namespace ncui {
 
         WINDOW* get() const noexcept { return win_.get(); }
 
+        int height() const { return getmaxy(win_.get()); }
+        int width() const { return getmaxx(win_.get()); }
+
     private:
         struct windowDeleter {
             void operator()(WINDOW* win) const noexcept {
                 if (win) delwin(win);
             }
         };
+        
         std::unique_ptr<WINDOW, windowDeleter> win_;
     };
 }

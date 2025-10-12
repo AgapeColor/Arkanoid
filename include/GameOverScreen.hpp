@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ncurses.h>
+#include "Window.hpp"
 
 class ConsoleViewport;
 class SidePanel;
@@ -8,31 +9,45 @@ class SidePanel;
 class GameOverScreen {
 public:
     GameOverScreen(const ConsoleViewport& viewport, const SidePanel& statistic);
-    ~GameOverScreen();
+    GameOverScreen(const GameOverScreen& obj) = delete;
+    GameOverScreen& operator=(const GameOverScreen& obj) = delete;
+    GameOverScreen(GameOverScreen&& obj) = delete;
+    GameOverScreen& operator=(GameOverScreen&& obj) = delete;
+    ~GameOverScreen() = default;
+
     void render();
     bool isGameOver() const { return isGameOver_; };
 private:
     class StatisticWindow {
     public:
-        StatisticWindow(int height, int width, WINDOW* parent, const SidePanel& statistic);
-        ~StatisticWindow();
+        StatisticWindow(ncui::Window statisticWin, const SidePanel& statistic);
+        StatisticWindow(const StatisticWindow& obj) = delete;
+        StatisticWindow& operator=(const StatisticWindow& obj) = delete;
+        StatisticWindow(StatisticWindow&& obj) noexcept = default;
+        StatisticWindow& operator=(StatisticWindow&& obj) = delete;
+        ~StatisticWindow() = default;
         void render();
     private:
+        ncui::Window statisticWin_;
         int height_;
         int width_;
         int score_;
         int level_;
-        WINDOW* win_;
     };
     class MenuWindow {
     public:
-        MenuWindow(int height, int width, WINDOW* parent, GameOverScreen& owner);
-        ~MenuWindow();
+        MenuWindow(ncui::Window menuWin, GameOverScreen& owner);
+        MenuWindow(const MenuWindow& obj) = delete;
+        MenuWindow& operator=(const MenuWindow& obj) = delete;
+        MenuWindow(MenuWindow&& obj) noexcept = default;
+        MenuWindow& operator=(MenuWindow&& obj) = delete;
+        ~MenuWindow() = default;
+        
         void render();
     private:
+        ncui::Window menuWin_;
         int height_;
         int width_;
-        WINDOW* win_;
         GameOverScreen& owner_;
     private:
         const char* menuItems_[2] = {"Restart", "Exit"};
@@ -42,7 +57,7 @@ private:
     int height_;
     int width_;
     bool isGameOver_;
-    WINDOW* gameOverWin_;
+    ncui::Window gameOverWin_;
     StatisticWindow statisticWin_;
     MenuWindow menuWin_;
 };

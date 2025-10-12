@@ -3,6 +3,7 @@
 #include <ncurses.h>
 #include "../include/SidePanel.hpp"
 #include "../include/GameField.hpp"
+#include "Window.hpp"
 
 class ConsoleViewport;
 
@@ -13,19 +14,21 @@ public:
     GameWindow& operator=(const GameWindow& obj) = delete;
     GameWindow(GameWindow&& obj) = delete;
     GameWindow& operator=(GameWindow&& obj) = delete;
-    ~GameWindow();
+    ~GameWindow() = default;
     
     void render();
     void reset();
     int height() const { return height_; }
     int width() const { return width_; }
-    WINDOW* gameWindow() const { return gameWin_; }
+    WINDOW* gameWindow() const { return gameWin_.get(); }
+    //WINDOW* gameWindow() const { return gameWin_; }
     GameField& gameField() { return field_; }
     SidePanel& sidePanel() { return sidePanel_; }
 private:
     int height_;
     int width_;
-    WINDOW* gameWin_;
+    ncui::Window gameWin_;
+    //WINDOW* gameWin_;
     SidePanel sidePanel_;
     GameField field_;
 };

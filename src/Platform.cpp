@@ -28,14 +28,7 @@ void Platform::move(const GameField& field, int dir) {
 }
 
 void Platform::render(const GameField& field) const {
-    //Rendering platform
     mvwhline(field.fieldWin(), posY_, posX_, ACS_HLINE, width_);
-
-    //Сlearing platform's traces
-/*     if (movement_ == Direction::right)
-        mvwhline(field.fieldWin(), posY_, posX_ - 2, ' ', 2);
-    else if (movement_ == Direction::left)
-        mvwhline(field.fieldWin(), posY_, posX_ + width_, ' ', 2); */
 }
 
 void Platform::reset(const GameField& field) {

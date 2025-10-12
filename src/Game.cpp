@@ -43,8 +43,6 @@ void Game::update() {
 
 void Game::render() {
     gameWindow_.render();
-    // sidePanel_.render();
-    // field_.render();
     platform_.render(field_);
     ball_.render(field_);
 }

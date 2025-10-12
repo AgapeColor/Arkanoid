@@ -2,30 +2,31 @@
 
 #include <vector>
 #include <ncurses.h>
+#include "Window.hpp"
 
 class ConsoleViewport;
-class GameWindow;
 
 class GameField {
 public:
-    GameField(int height, int width, WINDOW* parent, int ownerWidth);
+    GameField(ncui::Window fieldWin);
     GameField(const GameField& obj) = delete;
     GameField& operator=(const GameField& obj) = delete;
-    GameField(GameField&& obj) = delete;
-    GameField& operator=(GameField&& obj) = delete;
-    ~GameField();
+    GameField(GameField&& obj) noexcept = default;
+    GameField& operator=(GameField&& obj) = default;
+    ~GameField() = default;
+    
     void render();
     void reset();
     int height() const { return height_; };
     int width() const { return width_; };
-    WINDOW* fieldWin() const { return fieldWin_; };
+    WINDOW* fieldWin() const { return fieldWin_.get(); }
     chtype cell(int y, int x) const;
 private:
+    ncui::Window fieldWin_;
     int height_;
     int width_;
-    WINDOW* fieldWin_;
     std::vector<std::vector<chtype>> field_;
-    const std::vector<chtype> clearLine;
+    std::vector<chtype> clearLine;
     bool hasBorders;
     void setFieldBorders();   
 };

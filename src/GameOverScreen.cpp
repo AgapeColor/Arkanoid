@@ -2,75 +2,64 @@
 #include "../include/ConsoleViewport.hpp"
 #include "../include/SidePanel.hpp"
 
+
 GameOverScreen::GameOverScreen(const ConsoleViewport &viewport, const SidePanel& statistic)
   : height_(viewport.height()),
     width_(viewport.width()),
     isGameOver_(false),
-    gameOverWin_(newwin(height_, width_, 1, 1)),
-    statisticWin_(height_, width_, gameOverWin_, statistic),
-    menuWin_(height_, width_, gameOverWin_, *this)
+    gameOverWin_(height_, width_, 1, 1),
+    statisticWin_(gameOverWin_.derwin(height_ / 2, width_ / 2 - 2 /* <-- width indent */, height_ * 0.3, (width_ / 2) - (width_ / 2 - 2)), statistic),
+    menuWin_(gameOverWin_.derwin(height_ / 2, width_ / 2 - 2 /* <-- width indent */, height_ * 0.3, width_ / 2), *this)
 {}
 
-GameOverScreen::~GameOverScreen() {
-  delwin(gameOverWin_);
-}
-
 void GameOverScreen::render() {
-  wclear(gameOverWin_);
-  box(gameOverWin_, 0, 0);
-  mvwprintw(gameOverWin_, height_ * 0.2, width_ / 2 - 5, "Game Over");
-  wrefresh(gameOverWin_);
+  wclear(gameOverWin_.get());
+  box(gameOverWin_.get(), 0, 0);
+  mvwprintw(gameOverWin_.get(), height_ * 0.2, width_ / 2 - 5, "Game Over");
+  wrefresh(gameOverWin_.get());
   statisticWin_.render();
   menuWin_.render();
 }
 
-GameOverScreen::StatisticWindow::StatisticWindow(int height, int width, WINDOW* parent, const SidePanel& statistic)
-  : height_(height / 2),
-    width_(width / 2 - 2 /* <-- width indent */),
+GameOverScreen::StatisticWindow::StatisticWindow(ncui::Window statisticWin, const SidePanel& statistic)
+  : statisticWin_(std::move(statisticWin)),
+    height_(statisticWin.height()),
+    width_(statisticWin.width()),
     score_(statistic.score()),
-    level_(statistic.level()),
-    win_(derwin(parent, height_, width_, height * 0.3, (width / 2) - width_))
+    level_(statistic.level())
 {}
 
-GameOverScreen::StatisticWindow::~StatisticWindow() {
-  delwin(win_);
-}
-
 void GameOverScreen::StatisticWindow::render() {
-  box(win_, 0, 0);
-  mvwprintw(win_, 1, width_ / 2 - 5, "Statistic:");
-  mvwprintw(win_, 2, 1, "Score: %d", score_);
-  mvwprintw(win_, 3, 1, "Level: %d", level_);
-  wrefresh(win_);
+  box(statisticWin_.get(), 0, 0);
+  mvwprintw(statisticWin_.get(), 1, width_ / 2 - 5, "Statistic:");
+  mvwprintw(statisticWin_.get(), 2, 1, "Score: %d", score_);
+  mvwprintw(statisticWin_.get(), 3, 1, "Level: %d", level_);
+  wrefresh(statisticWin_.get());
 }
 
-GameOverScreen::MenuWindow::MenuWindow(int height, int width, WINDOW* parent, GameOverScreen& owner)
-  : height_(height / 2),
-    width_(width / 2 - 2 /* <-- width indent */),
-    win_(derwin(parent, height_, width_, height * 0.3, width / 2)),
+GameOverScreen::MenuWindow::MenuWindow(ncui::Window menuWin, GameOverScreen& owner)
+  : menuWin_(std::move(menuWin)),
+    height_(menuWin_.height()),
+    width_(menuWin_.width()),
     owner_(owner)
 {}
 
-GameOverScreen::MenuWindow::~MenuWindow() {
-  delwin(win_);
-}
-
 void GameOverScreen::MenuWindow::render() {
-  box(win_, 0, 0);
-  mvwprintw(win_, 1, width_ / 2 - 5, "Main menu");
-  keypad(win_, true);
-  
+  box(menuWin_.get(), 0, 0);
+  mvwprintw(menuWin_.get(), 1, width_ / 2 - 5, "Main menu");
+  keypad(menuWin_.get(), true);
+
   int ch;
   while (true) {
     for (int i = 0; i < menuPoints_; ++i) {
       if (i == selectedPoint_)
-        wattron(win_, A_REVERSE);
-      mvwprintw(win_, 2 + i, 2, "%s", menuItems_[i]);
-      wattroff(win_, A_REVERSE);
+        wattron(menuWin_.get(), A_REVERSE);
+      mvwprintw(menuWin_.get(), 2 + i, 2, "%s", menuItems_[i]);
+      wattroff(menuWin_.get(), A_REVERSE);
     }
-    wrefresh(win_);
-  
-    ch = wgetch(win_);
+    wrefresh(menuWin_.get());
+
+    ch = wgetch(menuWin_.get());
     switch (ch) {
       case KEY_UP:
         selectedPoint_ = (selectedPoint_ - 1 + menuPoints_) % menuPoints_;

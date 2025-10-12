@@ -16,7 +16,14 @@ public:
         rightDown,
         stop
     };
+    
     Ball(const Platform& platform);
+    Ball(const Ball&) = delete;
+    Ball& operator=(const Ball&) = delete;
+    Ball(Ball&&) = delete;
+    Ball& operator=(Ball&&) = delete;
+    ~Ball() = default;
+    
     void setDirection(const GameField& field, const Platform& platform);
     void move();
     void reset(const Platform& platform);
