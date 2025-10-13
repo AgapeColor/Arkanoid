@@ -3,6 +3,7 @@
 #include <type_traits>
 #include <chrono>
 #include <thread>
+#include <random>
 
 class GameField;
 class Platform;
@@ -71,6 +72,8 @@ private:
     std::chrono::steady_clock::time_point lastMove_;
     std::chrono::milliseconds moveInterval_{75};
     bool isBallLost_;
+    std::mt19937 gen_;
+    std::uniform_int_distribution<> dis_{0, 1};
 };
 
 constexpr Ball::Collision operator|(Ball::Collision lhs, Ball::Collision rhs) {
