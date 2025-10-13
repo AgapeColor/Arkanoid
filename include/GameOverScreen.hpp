@@ -26,6 +26,7 @@ private:
         StatisticWindow(StatisticWindow&& obj) noexcept = default;
         StatisticWindow& operator=(StatisticWindow&& obj) = delete;
         ~StatisticWindow() = default;
+
         void render();
     private:
         ncui::Window statisticWin_;
@@ -49,7 +50,6 @@ private:
         int height_;
         int width_;
         GameOverScreen& owner_;
-    private:
         const char* menuItems_[2] = {"Restart", "Exit"};
         int menuPoints_ = 2;
         int selectedPoint_ = 0;

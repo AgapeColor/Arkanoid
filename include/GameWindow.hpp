@@ -21,14 +21,12 @@ public:
     int height() const { return height_; }
     int width() const { return width_; }
     WINDOW* gameWindow() const { return gameWin_.get(); }
-    //WINDOW* gameWindow() const { return gameWin_; }
     GameField& gameField() { return field_; }
     SidePanel& sidePanel() { return sidePanel_; }
 private:
     int height_;
     int width_;
     ncui::Window gameWin_;
-    //WINDOW* gameWin_;
     SidePanel sidePanel_;
     GameField field_;
 };

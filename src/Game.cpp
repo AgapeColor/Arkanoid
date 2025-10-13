@@ -8,7 +8,7 @@ Game::Game()
       sidePanel_(gameWindow_.sidePanel()),
       platform_(gameWindow_.gameField()),
       ball_(platform_),
-      inputHandler_(field_.fieldWin()),
+      inputHandler_(field_.fieldWindow()),
       gameOverScreen_(viewport_, sidePanel_),
       running_(true)
 {}

@@ -19,7 +19,8 @@ public:
     void reset();
     int height() const { return height_; };
     int width() const { return width_; };
-    WINDOW* fieldWin() const { return fieldWin_.get(); }
+    WINDOW* fieldWin() const noexcept { return fieldWin_.get(); }
+    const ncui::Window& fieldWindow() const noexcept { return fieldWin_; }
     chtype cell(int y, int x) const;
 private:
     ncui::Window fieldWin_;
@@ -28,5 +29,5 @@ private:
     std::vector<std::vector<chtype>> field_;
     std::vector<chtype> clearLine;
     bool hasBorders;
-    void setFieldBorders();   
+    void setFieldBorders();
 };

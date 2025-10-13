@@ -1,11 +1,12 @@
 #pragma once
 
 #include <ncurses.h>
+#include "Window.hpp"
 
 class InputHandler {
 public:
-    explicit InputHandler(WINDOW* window) : win_(window) {
-        keypad(win_, TRUE);
+    explicit InputHandler(const ncui::Window& window) : win_(window) {
+        win_.setKeypad(true);
     }
     InputHandler(const InputHandler&) = delete;
     InputHandler& operator=(const InputHandler&) = delete;
@@ -13,8 +14,8 @@ public:
     InputHandler& operator=(InputHandler&&) = delete;
     ~InputHandler() = default;
 
-    int getInput() const { return wgetch(win_); }
-    void setNonBlocking(bool enabled) { nodelay(win_, enabled ? TRUE : FALSE); }
+    int getInput() const { return win_.getKey(); }
+    void setNonBlocking(bool enabled) { win_.setNonBlocking(enabled); }
 private:
-    WINDOW* win_;
+    const ncui::Window& win_;
 };
