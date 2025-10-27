@@ -74,8 +74,12 @@ void Ball::setDirection(const GameField& field, const Platform& platform) {
         }
         else if (hasCollision(collisionMask_, Collision::left))
           movement_ = Ball::Direction::rightDown;
-        else if (hasCollision(collisionMask_, Collision::bottom, Collision::left))
-          movement_ = Ball::Direction::rightUp;
+        else if (hasCollision(collisionMask_, Collision::bottom, Collision::left)) {
+          if (posY_ == field.height() - 2)
+            isBallLost_ = true;
+          else
+            movement_ = Ball::Direction::rightUp;
+        }
       }
       break;
 
@@ -92,8 +96,12 @@ void Ball::setDirection(const GameField& field, const Platform& platform) {
         }
         else if (hasCollision(collisionMask_, Collision::right))
           movement_ = Ball::Direction::leftDown;
-        else if (hasCollision(collisionMask_, Collision::bottom, Collision::right))
-          movement_ = Ball::Direction::leftUp;
+        else if (hasCollision(collisionMask_, Collision::bottom, Collision::right)) {
+          if (posY_ == field.height() - 2)
+            isBallLost_ = true;
+          else
+            movement_ = Ball::Direction::leftUp;
+        }
       }
       break;
 
