@@ -1,7 +1,8 @@
 #pragma once
 
 #include <vector>
-#include <ncurses.h>
+#include "Window.hpp"
+#include "NcuiTypes.hpp"
 
 class GameField;
 
@@ -26,6 +27,6 @@ private:
     int width_;
     int posY_;
     int posX_;
-    std::vector<chtype> platform_;
+    std::vector<ncui::cell_t> platform_;
     Direction movement_;
 };

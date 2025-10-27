@@ -1,6 +1,5 @@
 #pragma once
 
-#include <ncurses.h>
 #include "Window.hpp"
 
 class InputHandler {

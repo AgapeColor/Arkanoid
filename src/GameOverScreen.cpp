@@ -13,10 +13,10 @@ GameOverScreen::GameOverScreen(const ConsoleViewport &viewport, const SidePanel&
 {}
 
 void GameOverScreen::render() {
-  wclear(gameOverWin_.get());
-  box(gameOverWin_.get(), 0, 0);
-  mvwprintw(gameOverWin_.get(), height_ * 0.2, width_ / 2 - 5, "Game Over");
-  wrefresh(gameOverWin_.get());
+  gameOverWin_.wclear();
+  gameOverWin_.box();
+  gameOverWin_.printAt(height_ * 0.2, width_ / 2 - 5, "Game Over");
+  gameOverWin_.wrefresh();
   statisticWin_.render();
   menuWin_.render();
 }
@@ -30,11 +30,11 @@ GameOverScreen::StatisticWindow::StatisticWindow(ncui::Window statisticWin, cons
 {}
 
 void GameOverScreen::StatisticWindow::render() {
-  box(statisticWin_.get(), 0, 0);
-  mvwprintw(statisticWin_.get(), 1, width_ / 2 - 5, "Statistic:");
-  mvwprintw(statisticWin_.get(), 2, 1, "Score: %d", score_);
-  mvwprintw(statisticWin_.get(), 3, 1, "Level: %d", level_);
-  wrefresh(statisticWin_.get());
+  statisticWin_.box();
+  statisticWin_.printAt(1, width_ / 2 - 5, "Statistic:");
+  statisticWin_.printAt(2, 1, "Score: %d", score_);
+  statisticWin_.printAt(3, 1, "Level: %d", level_);
+  statisticWin_.wrefresh();
 }
 
 GameOverScreen::MenuWindow::MenuWindow(ncui::Window menuWin, GameOverScreen& owner)
@@ -45,21 +45,21 @@ GameOverScreen::MenuWindow::MenuWindow(ncui::Window menuWin, GameOverScreen& own
 {}
 
 void GameOverScreen::MenuWindow::render() {
-  box(menuWin_.get(), 0, 0);
-  mvwprintw(menuWin_.get(), 1, width_ / 2 - 5, "Main menu");
-  keypad(menuWin_.get(), true);
+  menuWin_.box();
+  menuWin_.printAt(1, width_ / 2 - 5, "Main menu");
+  menuWin_.setKeypad(true);
 
   int ch;
   while (true) {
     for (int i = 0; i < menuPoints_; ++i) {
       if (i == selectedPoint_)
-        wattron(menuWin_.get(), A_REVERSE);
-      mvwprintw(menuWin_.get(), 2 + i, 2, "%s", menuItems_[i]);
-      wattroff(menuWin_.get(), A_REVERSE);
+        menuWin_.attrOn(A_REVERSE);
+      menuWin_.printAt(2 + i, 2, "%s", menuItems_[i]);
+      menuWin_.attrOff(A_REVERSE);
     }
-    wrefresh(menuWin_.get());
+    menuWin_.wrefresh();
 
-    ch = wgetch(menuWin_.get());
+    ch = menuWin_.getKey();
     switch (ch) {
       case KEY_UP:
         selectedPoint_ = (selectedPoint_ - 1 + menuPoints_) % menuPoints_;

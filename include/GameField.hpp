@@ -1,8 +1,8 @@
 #pragma once
 
 #include <vector>
-#include <ncurses.h>
 #include "Window.hpp"
+#include "NcuiTypes.hpp"
 
 class ConsoleViewport;
 
@@ -19,15 +19,14 @@ public:
     void reset();
     int height() const { return height_; };
     int width() const { return width_; };
-    WINDOW* fieldWin() const noexcept { return fieldWin_.get(); }
     const ncui::Window& fieldWindow() const noexcept { return fieldWin_; }
-    chtype cell(int y, int x) const;
+    ncui::cell_t cell(int y, int x) const;
 private:
     ncui::Window fieldWin_;
     int height_;
     int width_;
-    std::vector<std::vector<chtype>> field_;
-    std::vector<chtype> clearLine;
+    std::vector<std::vector<ncui::cell_t>> field_;
+    std::vector<ncui::cell_t> clearLine;
     bool hasBorders;
     void setFieldBorders();
 };

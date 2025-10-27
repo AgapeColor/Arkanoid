@@ -1,6 +1,5 @@
 #pragma once
 
-#include <ncurses.h>
 #include "../include/SidePanel.hpp"
 #include "../include/GameField.hpp"
 #include "Window.hpp"
@@ -20,7 +19,6 @@ public:
     void reset();
     int height() const { return height_; }
     int width() const { return width_; }
-    WINDOW* gameWindow() const { return gameWin_.get(); }
     GameField& gameField() { return field_; }
     SidePanel& sidePanel() { return sidePanel_; }
 private:

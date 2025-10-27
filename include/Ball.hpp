@@ -4,6 +4,7 @@
 #include <chrono>
 #include <thread>
 #include <random>
+#include "NcuiTypes.hpp"
 
 class GameField;
 class Platform;
@@ -43,8 +44,8 @@ private:
     // Overloaded operators for Collision
     friend constexpr Collision operator|(Collision lhs, Collision rhs);
     friend constexpr Collision operator&(Collision lhs, Collision rhs);
-    friend Collision operator|=(Collision& lhs, Collision rhs);
-    friend Collision operator&=(Collision& lhs, Collision rhs);
+    friend Collision operator|=(Collision& lhs, Collision rhs) noexcept;
+    friend Collision operator&=(Collision& lhs, Collision rhs) noexcept;
 
     // Detection collisions
     struct DirectionInfo {
@@ -61,9 +62,12 @@ private:
     // Methods for checking collisions
     void checkCollision(const GameField& field, const Platform& platform);
     template <typename ... Args>
-    static bool hasCollision(Collision mask, Args ... args);
-    void checkPlatformCollision(const GameField& field, const Platform& platform, int posY, int posX, chtype& cellVert, chtype& cellHoriz);
-
+    static constexpr bool hasCollision(Collision mask, Args ... args) noexcept {
+        static_assert((std::is_same_v<Args, Collision> && ...), "hasCollision: args must be Ball::Collision");
+        const Collision combined = (Collision::none | ... | args);
+        return mask == combined;
+    }
+    void checkPlatformCollision(const GameField& field, const Platform& platform, int posY, int posX, ncui::cell_t& cellVert, ncui::cell_t& cellHoriz);
     int posY_;
     int posX_;
     bool isMoving_;
@@ -86,12 +90,12 @@ constexpr Ball::Collision operator&(Ball::Collision lhs, Ball::Collision rhs) {
     return static_cast<Ball::Collision>(static_cast<U>(lhs) & static_cast<U>(rhs));
 }
 
-inline Ball::Collision operator|=(Ball::Collision& lhs, Ball::Collision rhs) {
+inline Ball::Collision operator|=(Ball::Collision& lhs, Ball::Collision rhs) noexcept {
     lhs = lhs | rhs;
     return lhs;
 }
 
-inline Ball::Collision operator&=(Ball::Collision& lhs, Ball::Collision rhs) {
+inline Ball::Collision operator&=(Ball::Collision& lhs, Ball::Collision rhs) noexcept {
     lhs = lhs & rhs;
     return lhs;
 }

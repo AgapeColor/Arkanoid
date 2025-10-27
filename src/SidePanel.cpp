@@ -9,14 +9,14 @@ SidePanel::SidePanel(ncui::Window SidePanelWin)
 {}
 
 void SidePanel::render() {
-    mvwprintw(sidePanelWin_.get(), 1, 1, "Score: %d", score_);
-    mvwprintw(sidePanelWin_.get(), 2, 1, "Level: %d", level_);
-    wrefresh(sidePanelWin_.get());
+    sidePanelWin_.printAt(1, 1, "Score: %d", score_);
+    sidePanelWin_.printAt(2, 1, "Level: %d", level_);
+    sidePanelWin_.wrefresh();
 }
 
 void SidePanel::reset() {
-    box(sidePanelWin_.get(), 0, 0);
-    wrefresh(sidePanelWin_.get());
+    sidePanelWin_.box();
+    sidePanelWin_.wrefresh();
     score_ = 0;
     level_ = 0;
 }

@@ -1,7 +1,7 @@
-#include <ncurses.h>
 #include "../include/Ball.hpp"
 #include "GameField.hpp"
 #include "Platform.hpp"
+#include "NcuiTypes.hpp"
 
 Ball::Ball(const Platform& platform)
     : posY_(platform.posY() - 1),
@@ -131,7 +131,7 @@ void Ball::move() {
 }
 
 void Ball::render(const GameField& field) const {
-  mvwaddch(field.fieldWin(), posY_, posX_, 'O');
+  field.fieldWindow().addChAt(posY_, posX_, 'O');
 }
 
 void Ball::reset(const Platform& platform) {
@@ -153,8 +153,8 @@ void Ball::checkCollision(const GameField& field, const Platform& platform) {
   int currentDir = static_cast<int>(movement_);
   const DirectionInfo& dir = dirs[currentDir];
 
-  chtype cellVert = field.cell(posY_ + dir.y, posX_);
-  chtype cellHoriz = field.cell(posY_, posX_ + dir.x);
+  ncui::cell_t cellVert = field.cell(posY_ + dir.y, posX_);
+  ncui::cell_t cellHoriz = field.cell(posY_, posX_ + dir.x);
 
   if ((movement_ == Ball::Direction::leftDown || movement_ == Ball::Direction::rightDown) && posY_ == field.height() - 4)
     checkPlatformCollision(field, platform, posY_ + dir.y, posX_ + dir.x, cellVert, cellHoriz);
@@ -167,26 +167,20 @@ void Ball::checkCollision(const GameField& field, const Platform& platform) {
     collisionMask_ |= dir.horiz;
 }
 
-  template <typename... Args>
-  inline bool Ball::hasCollision(Collision mask, Args... args) {
-      Collision combined = (Collision::none | ... | args);
-      return mask == combined;
-  }
-
-  void Ball::checkPlatformCollision(const GameField& field, const Platform& platform, int posY, int posX, chtype& cellVert, chtype& cellHoriz) {
+  void Ball::checkPlatformCollision(const GameField& field, const Platform& platform, int posY, int posX, ncui::cell_t& /* chtype& */ cellVert, ncui::cell_t& /* chtype& */ cellHoriz) {
     int cornerBounce = dis_(gen_);
     if (posY == platform.posY()) {
       if (posX == platform.posX()) {
-        cellVert = ACS_HLINE;
+        cellVert = ncui::acs::HLine();
         if (movement_ == Ball::Direction::rightDown && cornerBounce == 1)
-          cellHoriz = ACS_VLINE;
+          cellHoriz = ncui::acs::VLine();
       }
       else if (posX == platform.posX() + platform.width() - 1) {
-        cellVert = ACS_HLINE;
+        cellVert = ncui::acs::HLine();
         if (movement_ == Ball::Direction::leftDown && cornerBounce == 1)
-          cellHoriz = ACS_VLINE;
+          cellHoriz = ncui::acs::VLine();
       }
       else if (posX > platform.posX() && posX < (platform.posX() + platform.width() - 1))
-        cellVert = ACS_HLINE;
+        cellVert = ncui::acs::HLine();
     }
   }

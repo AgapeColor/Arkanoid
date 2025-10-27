@@ -10,15 +10,15 @@ GameWindow::GameWindow(const ConsoleViewport &viewport)
 {}
 
 void GameWindow::render() {
-  wrefresh(gameWin_.get());
+  gameWin_.wrefresh();
   sidePanel_.render();
   field_.render();
 }
 
 void GameWindow::reset() {
-  wclear(gameWin_.get());
-  box(gameWin_.get(), 0, 0);
-  wrefresh(gameWin_.get());
+  gameWin_.wclear();
+  gameWin_.box();
+  gameWin_.wrefresh();
   sidePanel_.reset();
   field_.reset();
 }
