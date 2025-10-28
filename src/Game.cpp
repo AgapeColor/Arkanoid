@@ -10,7 +10,8 @@ Game::Game()
       ball_(platform_),
       inputHandler_(field_.fieldWindow()),
       gameOverScreen_(viewport_, sidePanel_),
-      running_(true)
+      running_(true),
+      lastInput_(0)
 {}
 
 void Game::input() {

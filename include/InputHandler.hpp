@@ -15,6 +15,7 @@ public:
 
     int getInput() const { return win_.getKey(); }
     void setNonBlocking(bool enabled) { win_.setNonBlocking(enabled); }
+    void setTimeout(int ms) { win_.setTimeout(ms); }
 private:
     const ncui::Window& win_;
 };

@@ -30,6 +30,7 @@ namespace ncui {
         // input
         void setKeypad(bool enabled) const noexcept { ::keypad(win_.get(), enabled ? TRUE : FALSE); }
         void setNonBlocking(bool enabled) const noexcept { ::nodelay(win_.get(), enabled ? TRUE : FALSE); }
+        void setTimeout(int ms) const noexcept { ::wtimeout(win_.get(), ms); }
         int getKey() const noexcept { return ::wgetch(win_.get()); }
         // render
         void box(chtype verch = 0, chtype horch = 0) const noexcept { ::box(win_.get(), verch, horch); }
