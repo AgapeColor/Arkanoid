@@ -17,6 +17,7 @@ public:
     void reset();
     int score() const { return score_; }
     int level() const { return level_; }
+    const ncui::Window& sidePanelWindow() const { return sidePanelWin_; }
 private:
     ncui::Window sidePanelWin_;
     int height_;

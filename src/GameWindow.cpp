@@ -10,7 +10,6 @@ GameWindow::GameWindow(const ConsoleViewport& viewport)
 {}
 
 void GameWindow::render() {
-    gameWin_.wrefresh();
     sidePanel_.render();
     field_.render();
 }

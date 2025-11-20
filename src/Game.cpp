@@ -1,3 +1,5 @@
+#include <chrono>
+#include <thread>
 #include <iostream>
 #include "Game.hpp"
 
@@ -19,15 +21,23 @@ void Game::input() {
 }
 
 void Game::run() {
+    using namespace std::chrono;
+    constexpr auto targetFrameDuration = milliseconds(16);
     viewport_.initialize();
     inputHandler_.setNonBlocking(true);
     do {
         running_ = true;
         reset();
         while (running_) {
+            auto frameStartTime = steady_clock::now();
+
             input();
             update();
             render();
+            
+            auto frameEndTime = steady_clock::now() - frameStartTime;
+            if (frameEndTime < targetFrameDuration)
+                std::this_thread::sleep_for(targetFrameDuration - frameEndTime);
         }
         gameOverScreen_.render();
     }
@@ -46,6 +56,8 @@ void Game::render() {
     gameWindow_.render();
     platform_.render(field_);
     ball_.render(field_);
+    field_.fieldWindow().wrefresh();
+    sidePanel_.sidePanelWindow().wrefresh();
 }
 
 void Game::reset() {

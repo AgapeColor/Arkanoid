@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "../include/Platform.hpp"
 #include "../include/GameField.hpp"
 #include "NcuiTypes.hpp"
