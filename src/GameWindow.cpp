@@ -1,7 +1,7 @@
 #include "../include/GameWindow.hpp"
 #include "../include/ConsoleViewport.hpp"
 
-GameWindow::GameWindow(const ConsoleViewport &viewport) 
+GameWindow::GameWindow(const ConsoleViewport& viewport) 
     : height_(viewport.height()),
       width_(viewport.width()),
       gameWin_(height_, width_, 1, 1),
@@ -10,15 +10,15 @@ GameWindow::GameWindow(const ConsoleViewport &viewport)
 {}
 
 void GameWindow::render() {
-  gameWin_.wrefresh();
-  sidePanel_.render();
-  field_.render();
+    gameWin_.wrefresh();
+    sidePanel_.render();
+    field_.render();
 }
 
 void GameWindow::reset() {
-  gameWin_.wclear();
-  gameWin_.box();
-  gameWin_.wrefresh();
-  sidePanel_.reset();
-  field_.reset();
+    gameWin_.wclear();
+    gameWin_.box();
+    gameWin_.wrefresh();
+    sidePanel_.reset();
+    field_.reset();
 }

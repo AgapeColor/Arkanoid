@@ -4,10 +4,10 @@
 #include "../include/ConsoleViewport.hpp"
 
 ConsoleViewport::ConsoleViewport(int marginY, int marginX)
-     : rows_(0),
-       cols_(0),
-       marginY_(marginY),
-       marginX_(marginX)
+    : rows_(0),
+      cols_(0),
+      marginY_(marginY),
+      marginX_(marginX)
 {
     initscr();
     noecho();

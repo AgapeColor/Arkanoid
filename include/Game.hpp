@@ -12,10 +12,10 @@
 class Game {
 public:
     Game();
-    Game(const Game&) = delete;
-    Game& operator=(const Game&) = delete;
-    Game(Game&&) = delete;
-    Game& operator=(Game&&) = delete;
+    Game(const Game& obj) = delete;
+    Game& operator=(const Game& obj) = delete;
+    Game(Game&& obj) = delete;
+    Game& operator=(Game&& obj) = delete;
     ~Game() = default;
     
     void run();

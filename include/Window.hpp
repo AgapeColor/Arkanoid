@@ -13,10 +13,10 @@ namespace ncui {
             if (!win_) throw std::runtime_error("fail of creation new window");
         }
         explicit Window (WINDOW* win) : win_(win) {}
-        Window(const Window&) = delete;
-        Window& operator=(const Window&) = delete;
-        Window(Window&&) = default;
-        Window& operator=(Window&&) = default;
+        Window(const Window& obj) = delete;
+        Window& operator=(const Window& obj) = delete;
+        Window(Window&& obj) = default;
+        Window& operator=(Window&& obj) = default;
 
         Window derwin(int height, int width, int beginY, int beginX) const {
             WINDOW* derived = ::derwin(this->win_.get(), height, width, beginY, beginX);

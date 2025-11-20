@@ -47,9 +47,9 @@ ncui::cell_t GameField::cell(int y, int x) const {
         return field_[y][x];
 }
 
-using idx = std::size_t;
 
 void GameField::setFieldBorders() {
+    using idx = std::size_t;
     // Init sides of field
     static constexpr idx L = 0, T = 0;
     const idx R = width_ - 1;

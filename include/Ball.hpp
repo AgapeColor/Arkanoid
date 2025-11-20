@@ -20,10 +20,10 @@ public:
     };
     
     Ball(const Platform& platform);
-    Ball(const Ball&) = delete;
-    Ball& operator=(const Ball&) = delete;
-    Ball(Ball&&) = delete;
-    Ball& operator=(Ball&&) = delete;
+    Ball(const Ball& obj) = delete;
+    Ball& operator=(const Ball& obj) = delete;
+    Ball(Ball&& obj) = delete;
+    Ball& operator=(Ball&& obj) = delete;
     ~Ball() = default;
     
     void setDirection(const GameField& field, const Platform& platform);
@@ -52,7 +52,7 @@ private:
         int y, x;
         Collision vert, horiz;
     };
-    static constexpr DirectionInfo dirs[] {
+    static constexpr DirectionInfo dirs_[] {
         {-1, -1, Collision::top,    Collision::left},  // leftUp
         {-1,  1, Collision::top,    Collision::right}, // rightUp
         { 1, -1, Collision::bottom, Collision::left},  // leftDown
