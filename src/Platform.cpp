@@ -11,17 +11,19 @@ Platform::Platform(const GameField& field)
 {}
 
 void Platform::move(const GameField& field, int dir) {
+    constexpr int speed = 3;
+
     switch (dir) {
         case ncui::key::Left:
             movement_ = Direction::left;
-            if (posX_ > 2) posX_-= 2;
-            else if (posX_ > 1) posX_ -= 1;
+            posX_ = std::max(1, posX_ - speed);
             break;
+            
         case ncui::key::Right:
             movement_ = Direction::right;
-            if (posX_ + platformWidth_ < field.width() - 2) posX_ += 2;
-            else if (posX_ + platformWidth_ < field.width() - 1) posX_ += 1;
+            posX_ = std::min(field.width() - platformWidth_ - 1, posX_ + speed);
             break;
+            
         default:
             movement_ = Direction::stop;
             break;
