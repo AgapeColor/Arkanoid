@@ -61,13 +61,11 @@ private:
     
     // Methods for checking collisions
     void checkCollision(const GameField& field, const Platform& platform);
-    template <typename ... Args>
-    static constexpr bool hasCollision(Collision mask, Args ... args) noexcept {
-        static_assert((std::is_same_v<Args, Collision> && ...), "hasCollision: args must be Ball::Collision");
-        const Collision combined = (Collision::none | ... | args);
-        return mask == combined;
+    static constexpr bool hasCollision(Collision mask, Collision check) noexcept {
+        return (mask & check) == check;
     }
     void checkPlatformCollision(const GameField& field, const Platform& platform, int posY, int posX, ncui::cell_t& cellVert, ncui::cell_t& cellHoriz);
+    
     int posY_;
     int posX_;
     bool isMoving_;

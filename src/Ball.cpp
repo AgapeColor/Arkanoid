@@ -18,96 +18,61 @@ void Ball::setDirection(const GameField& field, const Platform& platform) {
 // Set the first ball's direction
     if (!isMoving_) {
         isMoving_ = true;
-        switch (platform.movement()) {
-            case Platform::Direction::left:
-                movement_ = Ball::Direction::rightUp;
-                break;
-            case Platform::Direction::right:
-                movement_ = Ball::Direction::leftUp;
-                break;
-            default:
-                movement_ = Ball::Direction::stop;
-                isMoving_ = false;
-            break;
-        }
+        movement_ = (platform.movement() == Platform::Direction::left) 
+            ? Ball::Direction::rightUp
+            : (platform.movement() == Platform::Direction::right)
+                ? Ball::Direction::leftUp
+                : Ball::Direction::stop;
+        if (movement_ == Ball::Direction::stop) isMoving_ = false;
+        return;
     }
-    else {
-        switch (movement_) {
+
+    checkCollision(field, platform);
+    if (collisionMask_ == Collision::none) return;
+
+    if (hasCollision(collisionMask_, Collision::bottom) && posY_ == field.height() - 2) {
+        isBallLost_ = true;
+        return;
+    }
+
+    auto processBounce = [&](Collision corner, Direction cornerBounce,
+                             Collision edge1,  Direction edge1Bounce,
+                             Collision edge2,  Direction edge2Bounce) {
+        if (hasCollision(collisionMask_, corner))
+            movement_ = cornerBounce;
+        else if (hasCollision(collisionMask_, edge1))
+            movement_ = edge1Bounce;
+        else if (hasCollision(collisionMask_, edge2))
+            movement_ = edge2Bounce;
+    };
+
+    switch (movement_) {
         case Ball::Direction::leftUp:
-            checkCollision(field, platform);
-            if (collisionMask_ == Ball::Collision::none)
-                break;
-            else {
-                if (hasCollision(collisionMask_, Collision::top))
-                    movement_ = Ball::Direction::leftDown;
-                else if (hasCollision(collisionMask_, Collision::left))
-                    movement_ = Ball::Direction::rightUp;
-                else if (hasCollision(collisionMask_, Collision::top, Collision::left))
-                    movement_ = Ball::Direction::rightDown;
-            }
+            processBounce(Collision::top | Collision::left, Direction::rightDown,
+                          Collision::top,  Direction::leftDown,
+                          Collision::left, Direction::rightUp);
             break;
 
         case Ball::Direction::rightUp:
-            checkCollision(field, platform);
-            if (collisionMask_ == Ball::Collision::none)
-                break;
-            else {
-                if (hasCollision(collisionMask_, Collision::top))
-                    movement_ = Ball::Direction::rightDown;
-                else if (hasCollision(collisionMask_, Collision::right))
-                    movement_ = Ball::Direction::leftUp;
-                else if (hasCollision(collisionMask_, Collision::top, Collision::right))
-                    movement_ = Ball::Direction::leftDown;
-            }
+            processBounce(Collision::top  | Collision::right, Direction::leftDown,
+                          Collision::top,   Direction::rightDown,
+                          Collision::right, Direction::leftUp);
             break;
 
         case Ball::Direction::leftDown:
-            checkCollision(field, platform);
-            if (collisionMask_ == Ball::Collision::none)
-                break;
-            else {
-                if (hasCollision(collisionMask_, Collision::bottom)) {
-                    if (posY_ == field.height() - 2)
-                        isBallLost_ = true;
-                    else
-                        movement_ = Ball::Direction::leftUp;
-            }
-                else if (hasCollision(collisionMask_, Collision::left))
-                    movement_ = Ball::Direction::rightDown;
-                else if (hasCollision(collisionMask_, Collision::bottom, Collision::left)) {
-                    if (posY_ == field.height() - 2)
-                        isBallLost_ = true;
-                    else
-                        movement_ = Ball::Direction::rightUp;
-                }
-            }
+            processBounce(Collision::bottom | Collision::left, Direction::rightUp,
+                          Collision::bottom,  Direction::leftUp,
+                          Collision::left,    Direction::rightDown);
             break;
 
         case Ball::Direction::rightDown:
-            checkCollision(field, platform);
-            if (collisionMask_ == Ball::Collision::none)
-                break;
-            else {
-                if (hasCollision(collisionMask_, Collision::bottom)) {
-                    if (posY_ == field.height() - 2)
-                        isBallLost_ = true;
-                    else
-                        movement_ = Ball::Direction::rightUp;
-                }
-                else if (hasCollision(collisionMask_, Collision::right))
-                    movement_ = Ball::Direction::leftDown;
-                else if (hasCollision(collisionMask_, Collision::bottom, Collision::right)) {
-                    if (posY_ == field.height() - 2)
-                        isBallLost_ = true;
-                    else
-                        movement_ = Ball::Direction::leftUp;
-                }
-            }
+            processBounce(Collision::bottom | Collision::right, Direction::leftUp,
+                          Collision::bottom,  Direction::rightUp,
+                          Collision::right,   Direction::leftDown);
             break;
 
         default:
             break;
-        }
     }
 }
 
