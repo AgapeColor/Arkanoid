@@ -23,10 +23,14 @@ public:
     void move(const GameField& field, int dir);
     void render(const GameField& field) const;
     void reset(const GameField& field);
-    int posX() const { return posX_; }
-    int posY() const { return posY_; }
-    int width() const { return platformWidth_; }
-    Direction movement() const { return movement_; }
+
+    // Getters
+    int posX() const noexcept { return posX_; }
+    int posY() const noexcept { return posY_; }
+    int width() const noexcept { return platformWidth_; }
+    Direction movement() const noexcept { return movement_; }
+    int centerX() const noexcept { return posX_ + platformWidth_ / 2;}
+
 private:
     int platformWidth_;
     int posY_;

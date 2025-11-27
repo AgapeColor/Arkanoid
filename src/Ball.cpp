@@ -4,8 +4,8 @@
 #include "NcuiTypes.hpp"
 
 Ball::Ball(const Platform& platform)
-    : posY_(platform.posY() - 1),
-      posX_(platform.posX() + (platform.width() / 2)),
+    : posY_(platform.posY() - ballOffset_),
+      posX_(platform.centerX()),
       isMoving_(false),
       movement_(Direction::stop),
       collisionMask_(Collision::none),
@@ -107,8 +107,8 @@ void Ball::render(const GameField& field) const {
 }
 
 void Ball::reset(const Platform& platform) {
-    posY_= platform.posY() - 1;
-    posX_= platform.posX() + platform.width() / 2;
+    posY_= platform.posY() - ballOffset_;
+    posX_= platform.centerX();
     isMoving_= false;
     movement_ = Direction::stop;
     collisionMask_= Collision::none;

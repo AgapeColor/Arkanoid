@@ -17,10 +17,13 @@ public:
     
     void render();
     void reset();
-    int height() const { return height_; }
-    int width() const { return width_; }
-    GameField& gameField() { return field_; }
-    SidePanel& sidePanel() { return sidePanel_; }
+
+    // Getters
+    int height() const noexcept { return height_; }
+    int width() const noexcept { return width_; }
+    GameField& gameField() noexcept { return field_; }
+    SidePanel& sidePanel() noexcept { return sidePanel_; }
+    
 private:
     int height_;
     int width_;

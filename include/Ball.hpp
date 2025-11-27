@@ -31,7 +31,8 @@ public:
     void render(const GameField& field) const;
     
     // Getters
-    bool isBallLost() const { return isBallLost_; };
+    bool isBallLost() const noexcept { return isBallLost_; };
+
 private:
 // Collision detection block
     enum class Collision {
@@ -67,7 +68,8 @@ private:
     }
     void checkPlatformCollision(const GameField& field, const Platform& platform, int posY, int posX, ncui::cell_t& cellVert, ncui::cell_t& cellHoriz);
     
-    //Data
+// Data
+    static constexpr int ballOffset_ = 1;
     int posY_;
     int posX_;
     bool isMoving_;
