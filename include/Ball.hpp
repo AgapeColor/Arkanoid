@@ -3,7 +3,6 @@
 #include <type_traits>
 #include <chrono>
 #include <thread>
-#include <random>
 #include "NcuiTypes.hpp"
 
 class GameField;
@@ -30,6 +29,8 @@ public:
     void move();
     void reset(const Platform& platform);
     void render(const GameField& field) const;
+    
+    // Getters
     bool isBallLost() const { return isBallLost_; };
 private:
 // Collision detection block
@@ -66,6 +67,7 @@ private:
     }
     void checkPlatformCollision(const GameField& field, const Platform& platform, int posY, int posX, ncui::cell_t& cellVert, ncui::cell_t& cellHoriz);
     
+    //Data
     int posY_;
     int posX_;
     bool isMoving_;
@@ -74,8 +76,6 @@ private:
     std::chrono::steady_clock::time_point lastMove_;
     std::chrono::milliseconds moveInterval_{75};
     bool isBallLost_;
-    std::mt19937 gen_;
-    std::uniform_int_distribution<> dis_{0, 1};
 };
 
 constexpr Ball::Collision operator|(Ball::Collision lhs, Ball::Collision rhs) {

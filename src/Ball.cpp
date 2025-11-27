@@ -10,8 +10,7 @@ Ball::Ball(const Platform& platform)
       movement_(Direction::stop),
       collisionMask_(Collision::none),
       lastMove_(std::chrono::steady_clock::now()),
-      isBallLost_(false),
-      gen_(std::random_device{}())
+      isBallLost_(false)
 {}
 
 void Ball::setDirection(const GameField& field, const Platform& platform) {
@@ -142,16 +141,15 @@ void Ball::checkCollision(const GameField& field, const Platform& platform) {
 
   void Ball::checkPlatformCollision(const GameField& field, const Platform& platform,
                                     int posY, int posX, ncui::cell_t& cellVert, ncui::cell_t& cellHoriz) {
-    int cornerBounce = dis_(gen_);
     if (posY == platform.posY()) {
         if (posX == platform.posX()) {
             cellVert = ncui::acs::HLine();
-            if (movement_ == Ball::Direction::rightDown && cornerBounce == 1)
+            if (movement_ == Ball::Direction::rightDown)
                 cellHoriz = ncui::acs::VLine();
         }
         else if (posX == platform.posX() + platform.width() - 1) {
             cellVert = ncui::acs::HLine();
-            if (movement_ == Ball::Direction::leftDown && cornerBounce == 1)
+            if (movement_ == Ball::Direction::leftDown)
                 cellHoriz = ncui::acs::VLine();
         }
         else if (posX > platform.posX() && posX < (platform.posX() + platform.width() - 1))
