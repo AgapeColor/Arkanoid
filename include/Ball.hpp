@@ -70,6 +70,8 @@ private:
     
 // Data
     static constexpr int ballOffset_ = 1;
+    static constexpr int ballLostDistance_ = 2;
+    static constexpr int platformCheckDistance_ = 4;
     int posY_;
     int posX_;
     bool isMoving_;
