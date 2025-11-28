@@ -14,9 +14,18 @@ namespace ncui {
         inline cell_t LRCorner() noexcept { return ACS_LRCORNER; }
     }
     namespace key {
+        // Arrows
         inline constexpr int Up    = KEY_UP;
         inline constexpr int Down  = KEY_DOWN;
         inline constexpr int Left  = KEY_LEFT;
         inline constexpr int Right = KEY_RIGHT;
+
+        // Letters (lowercase)
+        inline constexpr int a = 'a';
+        inline constexpr int d = 'd';
+
+        // Letters (uppercase)
+        inline constexpr int A = 'A';
+        inline constexpr int D = 'D';
     }
 }
