@@ -4,8 +4,8 @@
 #include "NcuiTypes.hpp"
 
 Ball::Ball(const Platform& platform)
-    : posY_(platform.posY() - 1),
-      posX_(platform.posX() + (platform.width() / 2)),
+    : posY_(platform.posY() - ballOffset_),
+      posX_(platform.centerX()),
       isMoving_(false),
       movement_(Direction::stop),
       collisionMask_(Collision::none),
@@ -14,7 +14,7 @@ Ball::Ball(const Platform& platform)
 {}
 
 void Ball::setDirection(const GameField& field, const Platform& platform) {
-// Set the first ball's direction
+    // Set the first ball's direction
     if (!isMoving_) {
         isMoving_ = true;
         movement_ = (platform.movement() == Platform::Direction::left) 
@@ -22,16 +22,19 @@ void Ball::setDirection(const GameField& field, const Platform& platform) {
             : (platform.movement() == Platform::Direction::right)
                 ? Ball::Direction::leftUp
                 : Ball::Direction::stop;
-        if (movement_ == Ball::Direction::stop) isMoving_ = false;
+        if (movement_ == Ball::Direction::stop)
+            isMoving_ = false;
         return;
     }
 
     checkCollision(field, platform);
-    if (collisionMask_ == Collision::none) return;
-
-    if (hasCollision(collisionMask_, Collision::bottom) && posY_ == field.height() - 2) {
-        isBallLost_ = true;
+    if (collisionMask_ == Collision::none)
         return;
+
+    if (hasCollision(collisionMask_, Collision::bottom) &&
+        posY_ >= field.height() - ballLostDistance_) {
+            isBallLost_ = true;
+            return;
     }
 
     auto processBounce = [&](Collision corner, Direction cornerBounce,
@@ -107,9 +110,9 @@ void Ball::render(const GameField& field) const {
 }
 
 void Ball::reset(const Platform& platform) {
-    posY_= platform.posY() - 1;
-    posX_= platform.posX() + platform.width() / 2;
-    isMoving_= false;
+    posY_ = platform.posY() - ballOffset_;
+    posX_ = platform.centerX();
+    isMoving_ = false;
     movement_ = Direction::stop;
     collisionMask_= Collision::none;
     lastMove_= std::chrono::steady_clock::now();
@@ -122,15 +125,16 @@ void Ball::checkCollision(const GameField& field, const Platform& platform) {
     if (movement_ == Direction::stop)
         return;
 
-    int currentDir = static_cast<int>(movement_);
-    const DirectionInfo& dir = dirs_[currentDir];
+    const DirectionInfo& dir = dirs_[static_cast<int>(movement_)];
 
     ncui::cell_t cellVert = field.cell(posY_ + dir.y, posX_);
     ncui::cell_t cellHoriz = field.cell(posY_, posX_ + dir.x);
 
-    if ((movement_ == Ball::Direction::leftDown || movement_ == Ball::Direction::rightDown) && posY_ == field.height() - 4)
+    if ((movement_ == Ball::Direction::leftDown || movement_ == Ball::Direction::rightDown) &&
+        posY_ == field.height() - platformCheckDistance_) {
         checkPlatformCollision(field, platform, posY_ + dir.y, posX_ + dir.x, cellVert, cellHoriz);
-
+    }
+    
     if (cellVert != ' ' && cellHoriz == ' ')
         collisionMask_ |= dir.vert;
     else if (cellVert != ' ' && cellHoriz != ' ')

@@ -10,8 +10,11 @@ public:
     ~ConsoleViewport();
     
     void initialize() const;
-    int height() const { return rows_; }
-    int width() const { return cols_; }
+
+    // Getters
+    int height() const noexcept { return rows_; }
+    int width() const noexcept { return cols_; }
+    
 private:
     int rows_, cols_;
     int marginY_, marginX_;

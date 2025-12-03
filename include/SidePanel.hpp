@@ -15,9 +15,12 @@ public:
     
     void render();
     void reset();
-    int score() const { return score_; }
-    int level() const { return level_; }
-    const ncui::Window& sidePanelWindow() const { return sidePanelWin_; }
+    
+    // Getters
+    int score() const noexcept { return score_; }
+    int level() const noexcept { return level_; }
+    const ncui::Window& sidePanelWindow() const noexcept { return sidePanelWin_; }
+
 private:
     ncui::Window sidePanelWin_;
     int height_;

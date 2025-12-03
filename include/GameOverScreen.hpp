@@ -15,7 +15,10 @@ public:
     ~GameOverScreen() = default;
 
     void render();
-    bool isGameOver() const { return isGameOver_; };
+
+    // Getters
+    bool isGameOver() const noexcept { return isGameOver_; }
+
 private:
     class StatisticWindow {
     public:
@@ -27,6 +30,7 @@ private:
         ~StatisticWindow() = default;
 
         void render();
+        
     private:
         ncui::Window statisticWin_;
         int height_;
@@ -34,6 +38,7 @@ private:
         int score_;
         int level_;
     };
+
     class MenuWindow {
     public:
         MenuWindow(ncui::Window menuWin, GameOverScreen& owner);
@@ -44,6 +49,7 @@ private:
         ~MenuWindow() = default;
         
         void render();
+
     private:
         ncui::Window menuWin_;
         int height_;
@@ -53,6 +59,7 @@ private:
         int menuPoints_ = 2;
         int selectedPoint_ = 0;
     };
+    
     int height_;
     int width_;
     bool isGameOver_;

@@ -17,10 +17,13 @@ public:
     
     void render();
     void reset();
-    int height() const { return height_; };
-    int width() const { return width_; };
+
+    // Getters
+    int height() const noexcept { return height_; };
+    int width() const noexcept { return width_; };
     const ncui::Window& fieldWindow() const noexcept { return fieldWin_; }
     ncui::cell_t cell(int y, int x) const;
+    
 private:
     ncui::Window fieldWin_;
     int height_;

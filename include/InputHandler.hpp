@@ -13,9 +13,11 @@ public:
     InputHandler& operator=(InputHandler&& obj) = delete;
     ~InputHandler() = default;
 
-    int getInput() const { return win_.getKey(); }
-    void setNonBlocking(bool enabled) { win_.setNonBlocking(enabled); }
-    void setTimeout(int ms) { win_.setTimeout(ms); }
+    // Input operations
+    int getInput() const noexcept { return win_.getKey(); }
+    void setNonBlocking(bool enabled) const noexcept { win_.setNonBlocking(enabled); }
+    void setTimeout(int ms) const noexcept { win_.setTimeout(ms); }
+
 private:
     const ncui::Window& win_;
 };
