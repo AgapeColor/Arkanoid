@@ -16,15 +16,19 @@ void Platform::move(const GameField& field, int dir) {
 
     switch (dir) {
         case ncui::key::Left:
+        case ncui::key::a:
+        case ncui::key::A:
             movement_ = Direction::left;
             posX_ = std::max(1, posX_ - speed);
             break;
             
         case ncui::key::Right:
+        case ncui::key::d:
+        case ncui::key::D:
             movement_ = Direction::right;
             posX_ = std::min(field.width() - platformWidth_ - 1, posX_ + speed);
             break;
-            
+
         default:
             movement_ = Direction::stop;
             break;
