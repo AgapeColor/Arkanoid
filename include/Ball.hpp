@@ -2,7 +2,6 @@
 
 #include <type_traits>
 #include <chrono>
-#include <thread>
 #include "NcuiTypes.hpp"
 
 class GameField;
@@ -10,6 +9,13 @@ class Platform;
 
 class Ball {
 public:
+    Ball(const Platform& platform);
+    Ball(const Ball& obj) = delete;
+    Ball& operator=(const Ball& obj) = delete;
+    Ball(Ball&& obj) = delete;
+    Ball& operator=(Ball&& obj) = delete;
+    ~Ball() = default;
+
     enum class Direction {
         leftUp,
         rightUp,
@@ -17,13 +23,6 @@ public:
         rightDown,
         stop
     };
-    
-    Ball(const Platform& platform);
-    Ball(const Ball& obj) = delete;
-    Ball& operator=(const Ball& obj) = delete;
-    Ball(Ball&& obj) = delete;
-    Ball& operator=(Ball&& obj) = delete;
-    ~Ball() = default;
     
     void setDirection(const GameField& field, const Platform& platform);
     void move();
@@ -49,10 +48,12 @@ private:
     friend Collision operator|=(Collision& lhs, Collision rhs) noexcept;
     friend Collision operator&=(Collision& lhs, Collision rhs) noexcept;
 
-    // Detection collisions
+    // Direction info for collision detection
     struct DirectionInfo {
-        int y, x;
-        Collision vert, horiz;
+        int yOffset;            // Y offset: -1 (up), +1 (down)
+        int xOffset;            // X offset: -1 (left), +1 (right)
+        Collision vertical;     // collision type when hitting vertical obstacle
+        Collision horizontal;    // collision type when hitting horizontal obstacle
     };
     static constexpr DirectionInfo dirs_[] {
         {-1, -1, Collision::top,    Collision::left},  // leftUp
@@ -61,17 +62,29 @@ private:
         { 1,  1, Collision::bottom, Collision::right}  // rightDown
     };
     
-    // Methods for checking collisions
-    void checkCollision(const GameField& field, const Platform& platform);
-    static constexpr bool hasCollision(Collision mask, Collision check) noexcept {
+    // Main collisions check
+    void checkCollisions(const GameField& field, const Platform& platform);
+
+    // Field boundaries collision
+    void checkFieldBoundaries(const GameField& field, const DirectionInfo& dir);
+
+    // Platform collision
+    void checkPlatformCollision(const Platform& platform, const DirectionInfo& dir);
+    void checkPlatformTop(const Platform& platform, const DirectionInfo& dir);
+    void checkPlatformWalls(const Platform& platform, const DirectionInfo& dir);
+
+    // Helper methods
+    static constexpr bool isCollision(Collision mask, Collision check) noexcept {
         return (mask & check) == check;
     }
-    void checkPlatformCollision(const GameField& field, const Platform& platform, int posY, int posX, ncui::cell_t& cellVert, ncui::cell_t& cellHoriz);
+    constexpr bool isMovingDown() const noexcept {
+        return movement_ == Direction::leftDown || movement_ == Direction::rightDown;
+    }
     
-// Data
+    // Data
     static constexpr int ballOffset_ = 1;
     static constexpr int ballLostDistance_ = 2;
-    static constexpr int platformCheckDistance_ = 4;
+    static constexpr int platformEdgeOffset_ = 1; 
     int posY_;
     int posX_;
     bool isMoving_;

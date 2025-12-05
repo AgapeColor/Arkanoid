@@ -17,21 +17,23 @@ void Ball::setDirection(const GameField& field, const Platform& platform) {
     // Set the first ball's direction
     if (!isMoving_) {
         isMoving_ = true;
+        
         movement_ = (platform.movement() == Platform::Direction::left) 
             ? Ball::Direction::rightUp
             : (platform.movement() == Platform::Direction::right)
                 ? Ball::Direction::leftUp
                 : Ball::Direction::stop;
+
         if (movement_ == Ball::Direction::stop)
             isMoving_ = false;
         return;
     }
 
-    checkCollision(field, platform);
+    checkCollisions(field, platform);
     if (collisionMask_ == Collision::none)
         return;
 
-    if (hasCollision(collisionMask_, Collision::bottom) &&
+    if (isCollision(collisionMask_, Collision::bottom) &&
         posY_ >= field.height() - ballLostDistance_) {
             isBallLost_ = true;
             return;
@@ -40,11 +42,11 @@ void Ball::setDirection(const GameField& field, const Platform& platform) {
     auto processBounce = [&](Collision corner, Direction cornerBounce,
                              Collision edge1,  Direction edge1Bounce,
                              Collision edge2,  Direction edge2Bounce) {
-        if (hasCollision(collisionMask_, corner))
+        if (isCollision(collisionMask_, corner))
             movement_ = cornerBounce;
-        else if (hasCollision(collisionMask_, edge1))
+        else if (isCollision(collisionMask_, edge1))
             movement_ = edge1Bounce;
-        else if (hasCollision(collisionMask_, edge2))
+        else if (isCollision(collisionMask_, edge2))
             movement_ = edge2Bounce;
     };
 
@@ -114,12 +116,12 @@ void Ball::reset(const Platform& platform) {
     posX_ = platform.centerX();
     isMoving_ = false;
     movement_ = Direction::stop;
-    collisionMask_= Collision::none;
-    lastMove_= std::chrono::steady_clock::now();
-    isBallLost_= false;
+    collisionMask_ = Collision::none;
+    lastMove_ = std::chrono::steady_clock::now();
+    isBallLost_ = false;
 }
 
-void Ball::checkCollision(const GameField& field, const Platform& platform) {
+void Ball::checkCollisions(const GameField& field, const Platform& platform) {
     collisionMask_ = Collision::none;
 
     if (movement_ == Direction::stop)
@@ -127,36 +129,53 @@ void Ball::checkCollision(const GameField& field, const Platform& platform) {
 
     const DirectionInfo& dir = dirs_[static_cast<int>(movement_)];
 
-    ncui::cell_t cellVert = field.cell(posY_ + dir.y, posX_);
-    ncui::cell_t cellHoriz = field.cell(posY_, posX_ + dir.x);
-
-    if ((movement_ == Ball::Direction::leftDown || movement_ == Ball::Direction::rightDown) &&
-        posY_ == field.height() - platformCheckDistance_) {
-        checkPlatformCollision(field, platform, posY_ + dir.y, posX_ + dir.x, cellVert, cellHoriz);
-    }
-    
-    if (cellVert != ' ' && cellHoriz == ' ')
-        collisionMask_ |= dir.vert;
-    else if (cellVert != ' ' && cellHoriz != ' ')
-        collisionMask_ |= dir.vert | dir.horiz;
-    else if (cellVert == ' ' && cellHoriz != ' ')
-        collisionMask_ |= dir.horiz;
+    checkPlatformCollision(platform, dir);
+    checkFieldBoundaries(field, dir);
 }
 
-  void Ball::checkPlatformCollision(const GameField& field, const Platform& platform,
-                                    int posY, int posX, ncui::cell_t& cellVert, ncui::cell_t& cellHoriz) {
-    if (posY == platform.posY()) {
-        if (posX == platform.posX()) {
-            cellVert = ncui::acs::HLine();
-            if (movement_ == Ball::Direction::rightDown)
-                cellHoriz = ncui::acs::VLine();
-        }
-        else if (posX == platform.posX() + platform.width() - 1) {
-            cellVert = ncui::acs::HLine();
-            if (movement_ == Ball::Direction::leftDown)
-                cellHoriz = ncui::acs::VLine();
-        }
-        else if (posX > platform.posX() && posX < (platform.posX() + platform.width() - 1))
-            cellVert = ncui::acs::HLine();
+void Ball::checkPlatformCollision(const Platform& platform, const DirectionInfo& dir) {
+    if (!isMovingDown()) return;
+
+    checkPlatformTop(platform, dir);
+    checkPlatformWalls(platform, dir);
+}
+
+void Ball::checkFieldBoundaries(const GameField& field, const DirectionInfo& dir) {
+    ncui::cell_t cellVert = field.cell(posY_ + dir.yOffset, posX_);
+    ncui::cell_t cellHoriz = field.cell(posY_, posX_ + dir.xOffset);
+
+    if (cellVert != ' ' && cellHoriz == ' ')
+        collisionMask_ |= dir.vertical;
+    else if (cellVert != ' ' && cellHoriz != ' ')
+        collisionMask_ |= dir.vertical | dir.horizontal;
+    else if (cellVert == ' ' && cellHoriz != ' ')
+        collisionMask_ |= dir.horizontal;
+}
+
+void Ball::checkPlatformTop(const Platform& platform, const DirectionInfo& dir) {
+    int nextBallPosY = posY_ + dir.yOffset;
+    int nextBallPosX = posX_ + dir.xOffset;
+
+    if (nextBallPosY != platform.posY()) return;
+
+    if (nextBallPosX == platform.leftEdge()) {
+        collisionMask_ |= dir.horizontal;
+        if (movement_ == Ball::Direction::rightDown)
+            collisionMask_ |= dir.horizontal;
     }
-  }
+    else if (nextBallPosX == platform.rightEdge()) {
+        collisionMask_ |= dir.vertical;
+        if (movement_ == Ball::Direction::leftDown)
+            collisionMask_ |= dir.horizontal;
+    }
+    else if (nextBallPosX > platform.leftEdge() && nextBallPosX < platform.rightEdge())
+        collisionMask_ |= dir.vertical;
+}
+
+void Ball::checkPlatformWalls(const Platform& platform, const DirectionInfo& dir) {
+     if (posY_ != platform.posY()) return;
+        
+     if (posX_ == platform.leftEdge() - platformEdgeOffset_ ||
+        posX_ == platform.rightEdge() + platformEdgeOffset_)
+        collisionMask_ |= dir.horizontal;
+}
