@@ -19,12 +19,12 @@ void Ball::setDirection(const GameField& field, const Platform& platform) {
         isMoving_ = true;
         
         movement_ = (platform.movement() == Platform::Direction::left) 
-            ? Ball::Direction::rightUp
+            ? Direction::rightUp
             : (platform.movement() == Platform::Direction::right)
-                ? Ball::Direction::leftUp
-                : Ball::Direction::stop;
+                ? Direction::leftUp
+                : Direction::stop;
 
-        if (movement_ == Ball::Direction::stop)
+        if (movement_ == Direction::stop)
             isMoving_ = false;
         return;
     }
@@ -51,25 +51,25 @@ void Ball::setDirection(const GameField& field, const Platform& platform) {
     };
 
     switch (movement_) {
-        case Ball::Direction::leftUp:
+        case Direction::leftUp:
             processBounce(Collision::top | Collision::left, Direction::rightDown,
                           Collision::top,  Direction::leftDown,
                           Collision::left, Direction::rightUp);
             break;
 
-        case Ball::Direction::rightUp:
+        case Direction::rightUp:
             processBounce(Collision::top  | Collision::right, Direction::leftDown,
                           Collision::top,   Direction::rightDown,
                           Collision::right, Direction::leftUp);
             break;
 
-        case Ball::Direction::leftDown:
+        case Direction::leftDown:
             processBounce(Collision::bottom | Collision::left, Direction::rightUp,
                           Collision::bottom,  Direction::leftUp,
                           Collision::left,    Direction::rightDown);
             break;
 
-        case Ball::Direction::rightDown:
+        case Direction::rightDown:
             processBounce(Collision::bottom | Collision::right, Direction::leftUp,
                           Collision::bottom,  Direction::rightUp,
                           Collision::right,   Direction::leftDown);
@@ -86,22 +86,22 @@ void Ball::move() {
         return;
     lastMove_ = now;
     switch (movement_) {
-        case Ball::Direction::leftUp:
+        case Direction::leftUp:
             --posY_;
             --posX_;
             break;
-        case Ball::Direction::rightUp:
+        case Direction::rightUp:
             --posY_;
             ++posX_;
             break;
-        case Ball::Direction::leftDown:
+        case Direction::leftDown:
             ++posY_;
             --posX_;
             break;
-        case Ball::Direction::rightDown:
+        case Direction::rightDown:
             ++posY_;
             ++posX_;
-            break;  
+            break;
         default:
             break;
     }
