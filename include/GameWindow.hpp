@@ -8,7 +8,7 @@ class ConsoleViewport;
 
 class GameWindow {
 public:
-    GameWindow(const ConsoleViewport& viewport);
+    explicit GameWindow(const ConsoleViewport& viewport);
     GameWindow(const GameWindow& obj) = delete;
     GameWindow& operator=(const GameWindow& obj) = delete;
     GameWindow(GameWindow&& obj) = delete;

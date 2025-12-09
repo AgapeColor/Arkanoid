@@ -9,7 +9,7 @@ class Platform;
 
 class Ball {
 public:
-    Ball(const Platform& platform);
+    explicit Ball(const Platform& platform) noexcept;
     Ball(const Ball& obj) = delete;
     Ball& operator=(const Ball& obj) = delete;
     Ball(Ball&& obj) = delete;

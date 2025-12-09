@@ -8,11 +8,11 @@ class ConsoleViewport;
 
 class GameField {
 public:
-    GameField(ncui::Window fieldWin);
+    explicit GameField(ncui::Window fieldWin);
     GameField(const GameField& obj) = delete;
     GameField& operator=(const GameField& obj) = delete;
-    GameField(GameField&& obj) noexcept = default;
-    GameField& operator=(GameField&& obj) = default;
+    GameField(GameField&& obj) = delete;
+    GameField& operator=(GameField&& obj) = delete;
     ~GameField() = default;
     
     void render();

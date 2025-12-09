@@ -3,7 +3,7 @@
 #include "Platform.hpp"
 #include "NcuiTypes.hpp"
 
-Ball::Ball(const Platform& platform)
+Ball::Ball(const Platform& platform) noexcept
     : posY_(platform.posY() - ballOffset_),
       posX_(platform.centerX()),
       isMoving_(false),
@@ -159,7 +159,7 @@ void Ball::checkPlatformTop(const Platform& platform, const DirectionInfo& dir) 
     if (nextBallPosY != platform.posY()) return;
 
     if (nextBallPosX == platform.leftEdge()) {
-        collisionMask_ |= dir.horizontal;
+        collisionMask_ |= dir.vertical;
         if (movement_ == Ball::Direction::rightDown)
             collisionMask_ |= dir.horizontal;
     }
@@ -175,7 +175,7 @@ void Ball::checkPlatformTop(const Platform& platform, const DirectionInfo& dir) 
 void Ball::checkPlatformWalls(const Platform& platform, const DirectionInfo& dir) {
      if (posY_ != platform.posY()) return;
         
-     if (posX_ == platform.leftEdge() - platformEdgeOffset_ ||
-        posX_ == platform.rightEdge() + platformEdgeOffset_)
+     if ((posX_ == platform.leftEdge() - platformEdgeOffset_ && movement_ == Direction::rightDown) ||
+        (posX_ == platform.rightEdge() + platformEdgeOffset_ && movement_ == Direction::leftDown))
         collisionMask_ |= dir.horizontal;
 }

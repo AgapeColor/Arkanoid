@@ -6,10 +6,10 @@ class ConsoleViewport;
 
 class SidePanel {
 public:
-    SidePanel(ncui::Window sidePanelWin);
+    explicit SidePanel(ncui::Window sidePanelWin) noexcept;
     SidePanel(const SidePanel& obj) = delete;
     SidePanel& operator=(const SidePanel& obj) = delete;
-    SidePanel(SidePanel&& obj) noexcept = default;
+    SidePanel(SidePanel&& obj) = delete;
     SidePanel& operator=(SidePanel&& obj) = delete;
     ~SidePanel() = default;
     

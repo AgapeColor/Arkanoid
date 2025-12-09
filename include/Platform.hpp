@@ -8,18 +8,18 @@ class GameField;
 
 class Platform {
 public:
+    explicit Platform(const GameField& field);
+    Platform(const Platform& obj) = delete;
+    Platform& operator=(const Platform& obj) = delete;
+    Platform(Platform&& obj) = delete;
+    Platform& operator=(Platform&& obj) = delete;
+
     enum class Direction {
         stop,
         left,
         right
     };
     
-    Platform(const GameField& field);
-    Platform(const Platform& obj) = delete;
-    Platform& operator=(const Platform& obj) = delete;
-    Platform(Platform&& obj) = delete;
-    Platform& operator=(Platform&& obj) = delete;
-
     void move(const GameField& field, int dir);
     void render(const GameField& field) const;
     void reset(const GameField& field);

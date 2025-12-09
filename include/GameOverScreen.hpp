@@ -7,7 +7,7 @@ class SidePanel;
 
 class GameOverScreen {
 public:
-    GameOverScreen(const ConsoleViewport& viewport, const SidePanel& statistic);
+    explicit GameOverScreen(const ConsoleViewport& viewport, const SidePanel& statistic);
     GameOverScreen(const GameOverScreen& obj) = delete;
     GameOverScreen& operator=(const GameOverScreen& obj) = delete;
     GameOverScreen(GameOverScreen&& obj) = delete;
@@ -25,7 +25,7 @@ private:
         StatisticWindow(ncui::Window statisticWin, const SidePanel& statistic);
         StatisticWindow(const StatisticWindow& obj) = delete;
         StatisticWindow& operator=(const StatisticWindow& obj) = delete;
-        StatisticWindow(StatisticWindow&& obj) noexcept = default;
+        StatisticWindow(StatisticWindow&& obj) = delete;
         StatisticWindow& operator=(StatisticWindow&& obj) = delete;
         ~StatisticWindow() = default;
 
@@ -44,7 +44,7 @@ private:
         MenuWindow(ncui::Window menuWin, GameOverScreen& owner);
         MenuWindow(const MenuWindow& obj) = delete;
         MenuWindow& operator=(const MenuWindow& obj) = delete;
-        MenuWindow(MenuWindow&& obj) noexcept = default;
+        MenuWindow(MenuWindow&& obj) = delete;
         MenuWindow& operator=(MenuWindow&& obj) = delete;
         ~MenuWindow() = default;
         

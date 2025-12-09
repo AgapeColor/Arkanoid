@@ -33,7 +33,7 @@ void GameOverScreen::StatisticWindow::render() {
     statisticWin_.box();
     statisticWin_.printAt(1, width_ / 2 - 5, "Statistic:");
     statisticWin_.printAt(2, 1, "Score: %d", score_);
-    statisticWin_.printAt(3, 1, "Level: %d", level_);
+    // statisticWin_.printAt(3, 1, "Level: %d", level_);
     statisticWin_.wrefresh();
 }
 
