@@ -8,6 +8,7 @@
 #include "InputHandler.hpp"
 #include "Ball.hpp"
 #include "GameOverScreen.hpp"
+#include "Blocks.hpp"
 
 class Game {
 public:
@@ -19,6 +20,7 @@ public:
     ~Game() = default;
     
     void run();
+    
 private:
     ConsoleViewport viewport_;
     GameWindow gameWindow_;
@@ -28,6 +30,7 @@ private:
     Ball ball_;
     InputHandler inputHandler_;
     GameOverScreen gameOverScreen_;
+    Blocks blocks_;
     bool running_;
     int lastInput_;
     void input();

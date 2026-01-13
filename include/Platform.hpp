@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vector>
-#include "Window.hpp"
 #include "NcuiTypes.hpp"
 
 class GameField;
@@ -13,7 +12,8 @@ public:
     Platform& operator=(const Platform& obj) = delete;
     Platform(Platform&& obj) = delete;
     Platform& operator=(Platform&& obj) = delete;
-
+    ~Platform() = default;
+    
     enum class Direction {
         stop,
         left,

@@ -12,6 +12,7 @@ Game::Game()
       ball_(platform_),
       inputHandler_(field_.fieldWindow()),
       gameOverScreen_(viewport_, sidePanel_),
+      blocks_(field_),
       running_(true),
       lastInput_(0)
 {}
@@ -56,6 +57,7 @@ void Game::render() {
     gameWindow_.render();
     platform_.render(field_);
     ball_.render(field_);
+    blocks_.render(field_);
     field_.fieldWindow().wrefresh();
     sidePanel_.sidePanelWindow().wrefresh();
 }

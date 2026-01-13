@@ -21,6 +21,7 @@ add_executable(arkanoid
     src/Ball.cpp
     src/GameOverScreen.cpp
     src/GameWindow.cpp
+    src/Blocks.cpp
 )
 
 # Paths to headers
