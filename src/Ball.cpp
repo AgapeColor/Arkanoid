@@ -1,7 +1,8 @@
 #include "../include/Ball.hpp"
-#include "GameField.hpp"
-#include "Platform.hpp"
-#include "NcuiTypes.hpp"
+#include "../include/GameField.hpp"
+#include "../include/Platform.hpp"
+#include "../include/NcuiTypes.hpp"
+#include "../include/Blocks.hpp"
 
 Ball::Ball(const Platform& platform) noexcept
     : posY_(platform.posY() - ballOffset_),

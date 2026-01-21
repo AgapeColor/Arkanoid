@@ -16,19 +16,12 @@ public:
     void render(const GameField& field);
 
 private:
-    static constexpr int rowsDivisor_ = 3;
     static constexpr int sideMargin_ = 3;
-
-    struct Block {
-        int y, x;
-        bool isDestroyed;
-    };
+    static constexpr int rowsDivisor_ = 3;
 
     int rows_;
     int cols_;
 
-    std::vector<Block> blocks_;
+    std::vector<std::vector<bool>> blocks_;
     int destroyedCount_;
-
-    void generateBlocks(const GameField& field);
 };

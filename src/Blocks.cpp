@@ -2,30 +2,22 @@
 #include "../include/GameField.hpp"
 
 Blocks::Blocks(const GameField& field)
-    : rows_(field.height() / 3),
+    : rows_(field.height() / rowsDivisor_),
       cols_(field.width() - 2 * sideMargin_),
-      blocks_(rows_ * cols_),
+      blocks_(rows_, std::vector<bool>(cols_, true)),
       destroyedCount_(0)
-{
-    generateBlocks(field);
-}
+{}
 
 void Blocks::render(const GameField& field) {
-    for (const auto& el : blocks_)
-        field.fieldWindow().addChAt(el.y, el.x, '0');
-}
-
-void Blocks::generateBlocks(const GameField& field) {
-    int startPosY = 3;
-    int startPosX = 3;
-    for (int i = 0, j = 1; i < blocks_.size(); ++i, ++j) {
-        blocks_[i].y = startPosY;
-        blocks_[i].x = startPosX++;
-        if (j / cols_ == 1) {
-            ++startPosY;
-            startPosX = 3;
-            j = 0;
+    for (int row = 0; row < rows_; ++row) {
+        for (int col = 0; col < cols_; ++col) {
+            if (blocks_[row][col] == true) {
+                int y = sideMargin_ + row;
+                int x = sideMargin_ + col;
+                field.fieldWindow().addChAt(y, x, '0');
+            }
+            else
+                field.fieldWindow().addCh(' ');
         }
-        blocks_[i].isDestroyed = false;
     }
 }

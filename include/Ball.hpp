@@ -53,7 +53,7 @@ private:
         int yOffset;            // Y offset: -1 (up), +1 (down)
         int xOffset;            // X offset: -1 (left), +1 (right)
         Collision vertical;     // collision type when hitting vertical obstacle
-        Collision horizontal;    // collision type when hitting horizontal obstacle
+        Collision horizontal;   // collision type when hitting horizontal obstacle
     };
     static constexpr DirectionInfo dirs_[] {
         {-1, -1, Collision::top,    Collision::left},  // leftUp

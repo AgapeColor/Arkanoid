@@ -21,6 +21,7 @@ namespace ncui {
         Window& operator=(const Window& obj) = delete;
         Window(Window&& obj) = default;
         Window& operator=(Window&& obj) = default;
+        ~Window() = default; 
 
         // Create derived window
         Window derwin(int height, int width, int beginY, int beginX) const {
