@@ -47,7 +47,7 @@ void Game::run() {
 
 void Game::update() {
     platform_.move(field_, lastInput_);
-    ball_.setDirection(field_, platform_);
+    ball_.setDirection(field_, platform_, blocks_);
     ball_.move();
     if (ball_.isBallLost())
         running_ = false;
@@ -56,8 +56,8 @@ void Game::update() {
 void Game::render() {
     gameWindow_.render();
     platform_.render(field_);
+    blocks_.render(field_, ball_);
     ball_.render(field_);
-    blocks_.render(field_);
     field_.fieldWindow().wrefresh();
     sidePanel_.sidePanelWindow().wrefresh();
 }
@@ -65,5 +65,12 @@ void Game::render() {
 void Game::reset() {
     platform_.reset(field_);
     ball_.reset(platform_);
+    blocks_.reset();
     gameWindow_.reset();
 }
+
+
+// Changes
+//
+// added blocks_ arg to setDirection call
+// added reset method to main reset func

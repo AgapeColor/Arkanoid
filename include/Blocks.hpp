@@ -3,6 +3,7 @@
 #include <vector>
 
 class GameField;
+class Ball;
 
 class Blocks {
 public:
@@ -13,7 +14,12 @@ public:
     Blocks& operator=(Blocks&& obj) = delete;
     ~Blocks() = default;
 
-    void render(const GameField& field);
+    void reset();
+
+    // Getters
+    void render(const GameField& field, const Ball& ball);
+    bool isBlock(int y, int x) const;
+    void destroyBlock(int y, int x);
 
 private:
     static constexpr int sideMargin_ = 3;
@@ -25,3 +31,7 @@ private:
     std::vector<std::vector<bool>> blocks_;
     int destroyedCount_;
 };
+
+// Changes:
+// added isBlock method
+// added destroyBlock method

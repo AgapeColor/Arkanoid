@@ -6,6 +6,7 @@
 
 class GameField;
 class Platform;
+class Blocks;
 
 class Ball {
 public:
@@ -24,13 +25,15 @@ public:
         stop
     };
     
-    void setDirection(const GameField& field, const Platform& platform);
+    void setDirection(const GameField& field, const Platform& platform, Blocks& blocks);
     void move();
     void reset(const Platform& platform);
     void render(const GameField& field) const;
-    
+
     // Getters
     bool isBallLost() const noexcept { return isBallLost_; };
+    int posY() const { return posY_; }
+    int posX() const { return posX_; }
 
 private:
 // Collision detection block
@@ -63,7 +66,7 @@ private:
     };
     
     // Main collisions check
-    void checkCollisions(const GameField& field, const Platform& platform);
+    void checkCollisions(const GameField& field, const Platform& platform, Blocks& blocks);
 
     // Field boundaries collision
     void checkFieldBoundaries(const GameField& field, const DirectionInfo& dir);
@@ -72,6 +75,9 @@ private:
     void checkPlatformCollision(const Platform& platform, const DirectionInfo& dir);
     void checkPlatformTop(const Platform& platform, const DirectionInfo& dir);
     void checkPlatformWalls(const Platform& platform, const DirectionInfo& dir);
+
+    // Blocks collisions
+    void checkBlocksCollisions(Blocks& blocks, const DirectionInfo& dir);
 
     // Helper methods
     static constexpr bool isCollision(Collision mask, Collision check) noexcept {
@@ -114,3 +120,7 @@ inline Ball::Collision operator&=(Ball::Collision& lhs, Ball::Collision rhs) noe
     lhs = lhs & rhs;
     return lhs;
 }
+
+// Changes
+//
+// added forward declaration of Blocks class, added checkBlocksCollision method

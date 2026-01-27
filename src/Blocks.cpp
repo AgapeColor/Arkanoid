@@ -1,5 +1,7 @@
+#include <algorithm>
 #include "../include/Blocks.hpp"
 #include "../include/GameField.hpp"
+#include "../include/Ball.hpp"
 
 Blocks::Blocks(const GameField& field)
     : rows_(field.height() / rowsDivisor_),
@@ -8,7 +10,7 @@ Blocks::Blocks(const GameField& field)
       destroyedCount_(0)
 {}
 
-void Blocks::render(const GameField& field) {
+void Blocks::render(const GameField& field, const Ball& ball) {
     for (int row = 0; row < rows_; ++row) {
         for (int col = 0; col < cols_; ++col) {
             if (blocks_[row][col] == true) {
@@ -16,8 +18,41 @@ void Blocks::render(const GameField& field) {
                 int x = sideMargin_ + col;
                 field.fieldWindow().addChAt(y, x, '0');
             }
-            else
-                field.fieldWindow().addCh(' ');
         }
     }
 }
+
+bool Blocks::isBlock(int y, int x) const {
+    int row = y - sideMargin_;
+    int col = x - sideMargin_;
+
+    if (row < 0 || row >= rows_ || col < 0 || col >= cols_)
+        return false;
+
+    return blocks_[row][col];
+}
+
+void Blocks::destroyBlock(int y, int x) {
+    int row = y - sideMargin_;
+    int col = x - sideMargin_;
+    
+    if (row < 0 || row >= rows_ || col < 0 || col >= cols_)
+        return;
+
+    if (blocks_[row][col]) {
+        blocks_[row][col] = false;
+        ++destroyedCount_;
+    }
+}
+
+void Blocks::reset() {
+    for (auto& row : blocks_) {
+        std::fill(row.begin(), row.end(), true);
+    }
+    destroyedCount_ = 0;
+}
+
+// Changes:
+// added public isBlock method
+// added private destroyBlock method
+// deleted else block from render func

@@ -14,7 +14,7 @@ Ball::Ball(const Platform& platform) noexcept
       isBallLost_(false)
 {}
 
-void Ball::setDirection(const GameField& field, const Platform& platform) {
+void Ball::setDirection(const GameField& field, const Platform& platform, Blocks& blocks) {
     // Set the first ball's direction
     if (!isMoving_) {
         isMoving_ = true;
@@ -30,7 +30,7 @@ void Ball::setDirection(const GameField& field, const Platform& platform) {
         return;
     }
 
-    checkCollisions(field, platform);
+    checkCollisions(field, platform, blocks);
     if (collisionMask_ == Collision::none)
         return;
 
@@ -122,7 +122,7 @@ void Ball::reset(const Platform& platform) {
     isBallLost_ = false;
 }
 
-void Ball::checkCollisions(const GameField& field, const Platform& platform) {
+void Ball::checkCollisions(const GameField& field, const Platform& platform, Blocks& blocks) {
     collisionMask_ = Collision::none;
 
     if (movement_ == Direction::stop)
@@ -132,6 +132,7 @@ void Ball::checkCollisions(const GameField& field, const Platform& platform) {
 
     checkPlatformCollision(platform, dir);
     checkFieldBoundaries(field, dir);
+    checkBlocksCollisions(blocks, dir);
 }
 
 void Ball::checkPlatformCollision(const Platform& platform, const DirectionInfo& dir) {
@@ -180,3 +181,34 @@ void Ball::checkPlatformWalls(const Platform& platform, const DirectionInfo& dir
         (posX_ == platform.rightEdge() + platformEdgeOffset_ && movement_ == Direction::leftDown))
         collisionMask_ |= dir.horizontal;
 }
+
+void Ball::checkBlocksCollisions(Blocks& blocks, const DirectionInfo& dir) {
+    int nextBallPosY = posY_ + dir.yOffset;
+    int nextBallPosX = posX_ + dir.xOffset;
+
+    bool diagBlock  = blocks.isBlock(nextBallPosY, nextBallPosX);
+    bool vertBlock  = blocks.isBlock(nextBallPosY, posX_);
+    bool horizBlock = blocks.isBlock(posY_, nextBallPosX);
+
+    // Diagonal collision
+    if (diagBlock && !vertBlock && !horizBlock) {
+        blocks.destroyBlock(nextBallPosY, nextBallPosX);
+        collisionMask_ |= dir.vertical | dir.horizontal;
+        return;
+    }
+
+    // Vertical collision
+    if (vertBlock) {
+        blocks.destroyBlock(nextBallPosY, posX_);
+        collisionMask_ |= dir.vertical;
+    }
+    // Horizontal collision
+    if (horizBlock) {
+        blocks.destroyBlock(posY_, nextBallPosX);
+        collisionMask_ |= dir.horizontal;
+    }
+}
+
+// Changes
+//
+// added checkBlocksCollision method and related args
