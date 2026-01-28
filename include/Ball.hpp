@@ -88,9 +88,10 @@ private:
     }
     
     // Data
-    static constexpr int ballOffset_ = 1;
-    static constexpr int ballLostDistance_ = 2;
-    static constexpr int platformEdgeOffset_ = 1; 
+    static constexpr int BALL_OFFSET = 1;
+    static constexpr int BALL_LOST_DISTANCE = 2;
+    static constexpr int PLATFORM_EDGE_OFFSET = 1;
+
     int posY_;
     int posX_;
     bool isMoving_;
@@ -120,7 +121,3 @@ inline Ball::Collision operator&=(Ball::Collision& lhs, Ball::Collision rhs) noe
     lhs = lhs & rhs;
     return lhs;
 }
-
-// Changes
-//
-// added forward declaration of Blocks class, added checkBlocksCollision method

@@ -5,7 +5,7 @@
 #include "../include/Blocks.hpp"
 
 Ball::Ball(const Platform& platform) noexcept
-    : posY_(platform.posY() - ballOffset_),
+    : posY_(platform.posY() - BALL_OFFSET),
       posX_(platform.centerX()),
       isMoving_(false),
       movement_(Direction::stop),
@@ -35,7 +35,7 @@ void Ball::setDirection(const GameField& field, const Platform& platform, Blocks
         return;
 
     if (isCollision(collisionMask_, Collision::bottom) &&
-        posY_ >= field.height() - ballLostDistance_) {
+        posY_ >= field.height() - BALL_LOST_DISTANCE) {
             isBallLost_ = true;
             return;
     }
@@ -113,7 +113,7 @@ void Ball::render(const GameField& field) const {
 }
 
 void Ball::reset(const Platform& platform) {
-    posY_ = platform.posY() - ballOffset_;
+    posY_ = platform.posY() - BALL_OFFSET;
     posX_ = platform.centerX();
     isMoving_ = false;
     movement_ = Direction::stop;
@@ -177,8 +177,8 @@ void Ball::checkPlatformTop(const Platform& platform, const DirectionInfo& dir) 
 void Ball::checkPlatformWalls(const Platform& platform, const DirectionInfo& dir) {
      if (posY_ != platform.posY()) return;
         
-     if ((posX_ == platform.leftEdge() - platformEdgeOffset_ && movement_ == Direction::rightDown) ||
-        (posX_ == platform.rightEdge() + platformEdgeOffset_ && movement_ == Direction::leftDown))
+     if ((posX_ == platform.leftEdge() - PLATFORM_EDGE_OFFSET && movement_ == Direction::rightDown) ||
+        (posX_ == platform.rightEdge() + PLATFORM_EDGE_OFFSET && movement_ == Direction::leftDown))
         collisionMask_ |= dir.horizontal;
 }
 
@@ -208,7 +208,3 @@ void Ball::checkBlocksCollisions(Blocks& blocks, const DirectionInfo& dir) {
         collisionMask_ |= dir.horizontal;
     }
 }
-
-// Changes
-//
-// added checkBlocksCollision method and related args

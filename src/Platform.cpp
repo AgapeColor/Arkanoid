@@ -4,29 +4,27 @@
 #include "../include/NcuiTypes.hpp"
 
 Platform::Platform(const GameField& field)
-    : platformWidth_(field.width() / 5),
-      posY_(field.height() - 3),
-      posX_((field.width() / 2) - platformWidth_ / 2),
+    : platformWidth_(field.width() / PLATFORM_WIDTH_DIVISOR),
+      posY_(field.height() - PLATFORM_Y_OFFSET),
+      posX_((field.width() / FIELD_CENTER_DIVISOR) - platformWidth_ / FIELD_CENTER_DIVISOR),
       platform_(platformWidth_, ncui::acs::HLine()),
       movement_(Direction::stop)
 {}
 
 void Platform::move(const GameField& field, int dir) {
-    constexpr int speed = 3;
-
     switch (dir) {
         case ncui::key::Left:
         case ncui::key::a:
         case ncui::key::A:
             movement_ = Direction::left;
-            posX_ = std::max(1, posX_ - speed);
+            posX_ = std::max(BORDER_OFFSET, posX_ - MOVE_SPEED);
             break;
             
         case ncui::key::Right:
         case ncui::key::d:
         case ncui::key::D:
             movement_ = Direction::right;
-            posX_ = std::min(field.width() - platformWidth_ - 1, posX_ + speed);
+            posX_ = std::min(field.width() - platformWidth_ - BORDER_OFFSET, posX_ + MOVE_SPEED);
             break;
 
         default:
@@ -40,8 +38,8 @@ void Platform::render(const GameField& field) const {
 }
 
 void Platform::reset(const GameField& field) {
-    platformWidth_ = field.width() / 5;
-    posY_ = field.height() - 3;
-    posX_ = (field.width() / 2) - platformWidth_ / 2;
+    platformWidth_ = field.width() / PLATFORM_WIDTH_DIVISOR;
+    posY_ = field.height() - PLATFORM_Y_OFFSET;
+    posX_ = (field.width() / FIELD_CENTER_DIVISOR) - platformWidth_ / FIELD_CENTER_DIVISOR;
     movement_ = Direction::stop;
 }

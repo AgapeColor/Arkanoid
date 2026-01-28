@@ -15,6 +15,7 @@ public:
     
     void render();
     void reset();
+    void updateScore(int value) { score_ = value; }
     
     // Getters
     int score() const noexcept { return score_; }
@@ -22,6 +23,9 @@ public:
     const ncui::Window& sidePanelWindow() const noexcept { return sidePanelWin_; }
 
 private:
+    static constexpr int WINDOW_HEIGHT_DIVISOR = 2;
+    static constexpr int WINDOW_WIDTH_DIVISOR = 3;
+
     ncui::Window sidePanelWin_;
     int height_;
     int width_;

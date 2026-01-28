@@ -25,6 +25,9 @@ public:
     ncui::cell_t cell(int y, int x) const;
     
 private:
+    static constexpr int BORDER_WIDTH = 1;
+    static constexpr int HORIZONTAL_BORDERS = 2;
+
     ncui::Window fieldWin_;
     int height_;
     int width_;

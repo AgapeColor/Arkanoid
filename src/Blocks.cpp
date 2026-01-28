@@ -4,8 +4,8 @@
 #include "../include/Ball.hpp"
 
 Blocks::Blocks(const GameField& field)
-    : rows_(field.height() / rowsDivisor_),
-      cols_(field.width() - 2 * sideMargin_),
+    : rows_(field.height() / ROWS_DIVISOR),
+      cols_(field.width() - (2 * SIDE_MARGIN)), // Subtract margins from both sides
       blocks_(rows_, std::vector<bool>(cols_, true)),
       destroyedCount_(0)
 {}
@@ -14,8 +14,8 @@ void Blocks::render(const GameField& field, const Ball& ball) {
     for (int row = 0; row < rows_; ++row) {
         for (int col = 0; col < cols_; ++col) {
             if (blocks_[row][col] == true) {
-                int y = sideMargin_ + row;
-                int x = sideMargin_ + col;
+                int y = SIDE_MARGIN + row;
+                int x = SIDE_MARGIN + col;
                 field.fieldWindow().addChAt(y, x, '0');
             }
         }
@@ -23,8 +23,8 @@ void Blocks::render(const GameField& field, const Ball& ball) {
 }
 
 bool Blocks::isBlock(int y, int x) const {
-    int row = y - sideMargin_;
-    int col = x - sideMargin_;
+    int row = y - SIDE_MARGIN;
+    int col = x - SIDE_MARGIN;
 
     if (row < 0 || row >= rows_ || col < 0 || col >= cols_)
         return false;
@@ -33,8 +33,8 @@ bool Blocks::isBlock(int y, int x) const {
 }
 
 void Blocks::destroyBlock(int y, int x) {
-    int row = y - sideMargin_;
-    int col = x - sideMargin_;
+    int row = y - SIDE_MARGIN;
+    int col = x - SIDE_MARGIN;
     
     if (row < 0 || row >= rows_ || col < 0 || col >= cols_)
         return;
@@ -51,8 +51,3 @@ void Blocks::reset() {
     }
     destroyedCount_ = 0;
 }
-
-// Changes:
-// added public isBlock method
-// added private destroyBlock method
-// deleted else block from render func

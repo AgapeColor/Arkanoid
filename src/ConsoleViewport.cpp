@@ -26,8 +26,8 @@ void ConsoleViewport::detectWindowSize() {
     if (rawRows < 1 || rawCols < 1) {
         throw std::runtime_error("ConsoleViewport: invalid window size");
     }
-    rows_ = std::max(1, rawRows - 2 * marginY_);
-    cols_ = std::max(1, rawCols - 2 * marginX_);
+    rows_ = std::max(1, rawRows - (2 * marginY_));
+    cols_ = std::max(1, rawCols - (2 * marginX_));
 }
 
 void ConsoleViewport::initialize() const {

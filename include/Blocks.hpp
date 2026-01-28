@@ -20,10 +20,11 @@ public:
     void render(const GameField& field, const Ball& ball);
     bool isBlock(int y, int x) const;
     void destroyBlock(int y, int x);
+    int destroyedCount() const { return destroyedCount_; }
 
 private:
-    static constexpr int sideMargin_ = 3;
-    static constexpr int rowsDivisor_ = 3;
+    static constexpr int SIDE_MARGIN = 3;
+    static constexpr int ROWS_DIVISOR = 3;
 
     int rows_;
     int cols_;
@@ -31,7 +32,3 @@ private:
     std::vector<std::vector<bool>> blocks_;
     int destroyedCount_;
 };
-
-// Changes:
-// added isBlock method
-// added destroyBlock method

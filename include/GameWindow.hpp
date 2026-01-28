@@ -25,6 +25,17 @@ public:
     SidePanel& sidePanel() noexcept { return sidePanel_; }
     
 private:
+    static constexpr int PANEL_HEIGHT_DIVISOR = 3;
+    static constexpr int PANEL_WIDTH_DIVISOR = 3;
+    static constexpr int PANEL_Y_DIVISOR = 3;
+    static constexpr int PANEL_X_DIVISOR = 2;
+
+    static constexpr int FIELD_BORDER_OFFSET = 2;
+    static constexpr int FIELD_WIDTH_SCALE = 3;
+    static constexpr int FIELD_Y_OFFSET = 1;
+    static constexpr int FIELD_X_DIVISOR = 6;
+
+
     int height_;
     int width_;
     ncui::Window gameWin_;

@@ -10,8 +10,8 @@ GameField::GameField(ncui::Window fieldWin)
     : fieldWin_(std::move(fieldWin)),
       height_(fieldWin_.height()),
       width_(fieldWin_.width()),
-      field_(height_, std::vector<chtype>(width_, ' ')),
-      clearLine(width_ - 2, ' '),
+      field_(height_, std::vector<ncui::cell_t>(width_, ' ')),
+      clearLine(width_ - HORIZONTAL_BORDERS, ' '),
       hasBorders(false)
 {
     setFieldBorders();
@@ -28,7 +28,7 @@ void GameField::render() {
     else {
         for (int y = 1; y < height_ - 1; ++y) {
             fieldWin_.moveCursor(y, 1);
-            fieldWin_.addStr(clearLine.data(), width_ - 1);
+            fieldWin_.addStr(clearLine.data(), width_ - HORIZONTAL_BORDERS);
         }
     }
     fieldWin_.wrefresh();
@@ -60,9 +60,9 @@ void GameField::setFieldBorders() {
     field_[B][L] = ncui::acs::LLCorner();
     field_[B][R] = ncui::acs::LRCorner();
     // Top
-    std::fill_n(&field_[T][1], width_ - 2, ncui::acs::HLine());
+    std::fill_n(&field_[T][BORDER_WIDTH], width_ - HORIZONTAL_BORDERS, ncui::acs::HLine());
     // Bottom
-    std::fill_n(&field_[B][1], width_ - 2, ncui::acs::HLine());
+    std::fill_n(&field_[B][BORDER_WIDTH], width_ - HORIZONTAL_BORDERS, ncui::acs::HLine());
     // Walls
     for (idx y = 1; y < B; ++y) {
         field_[y][L] = ncui::acs::VLine();

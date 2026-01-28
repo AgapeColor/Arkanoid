@@ -60,6 +60,13 @@ private:
         int selectedPoint_ = 0;
     };
     
+    static constexpr int WINDOW_HEIGHT_DIVISOR = 2;
+    static constexpr int WINDOW_WIDTH_DIVISOR = 2;
+    static constexpr int WINDOW_WIDTH_INDENT = 2;
+    static constexpr double WINDOW_Y_POSITION = 0.3;
+    static constexpr double TITLE_Y_POSITION = 0.2;
+    static constexpr int TITLE_X_OFFSET = 5;
+
     int height_;
     int width_;
     bool isGameOver_;

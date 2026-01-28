@@ -18,5 +18,6 @@ public:
 private:
     int rows_, cols_;
     int marginY_, marginX_;
+    
     void detectWindowSize();
 };

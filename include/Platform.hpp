@@ -34,6 +34,12 @@ public:
     int rightEdge() const noexcept { return posX_ + platformWidth_ - 1; }
     
 private:
+    static constexpr int PLATFORM_WIDTH_DIVISOR = 5;
+    static constexpr int PLATFORM_Y_OFFSET = 3;
+    static constexpr int FIELD_CENTER_DIVISOR = 2;
+    static constexpr int MOVE_SPEED = 3;
+    static constexpr int BORDER_OFFSET = 1;
+
     int platformWidth_;
     int posY_;
     int posX_;

@@ -7,15 +7,24 @@ GameOverScreen::GameOverScreen(const ConsoleViewport& viewport, const SidePanel&
     : height_(viewport.height()),
       width_(viewport.width()),
       isGameOver_(false),
-      gameOverWin_(height_, width_, 1, 1),
-      statisticWin_(gameOverWin_.derwin(height_ / 2, width_ / 2 - 2 /* <-- width indent */, height_ * 0.3, (width_ / 2) - (width_ / 2 - 2)), statistic),
-      menuWin_(gameOverWin_.derwin(height_ / 2, width_ / 2 - 2 /* <-- width indent */, height_ * 0.3, width_ / 2), *this)
+      gameOverWin_(height_, width_, 1, 1),  // Position at y = 1, x = 1 (1 - cell offset)
+      statisticWin_(gameOverWin_.derwin(height_ / WINDOW_HEIGHT_DIVISOR,
+                                        width_ / WINDOW_WIDTH_DIVISOR - WINDOW_WIDTH_INDENT,
+                                        height_ * WINDOW_Y_POSITION,
+                                        (width_ / WINDOW_WIDTH_DIVISOR) - (width_ / WINDOW_WIDTH_DIVISOR - WINDOW_WIDTH_INDENT)),
+                                        statistic),
+
+      menuWin_(gameOverWin_.derwin(height_ / WINDOW_HEIGHT_DIVISOR,
+                                   width_ / WINDOW_WIDTH_DIVISOR - WINDOW_WIDTH_INDENT,
+                                   height_ * WINDOW_Y_POSITION,
+                                   width_ / WINDOW_WIDTH_DIVISOR),
+                                   *this)
 {}
 
 void GameOverScreen::render() {
     gameOverWin_.wclear();
     gameOverWin_.box();
-    gameOverWin_.printAt(height_ * 0.2, width_ / 2 - 5, "Game Over");
+    gameOverWin_.printAt(height_ * TITLE_Y_POSITION, width_ / WINDOW_WIDTH_DIVISOR - TITLE_X_OFFSET, "Game Over");
     gameOverWin_.wrefresh();
     statisticWin_.render();
     menuWin_.render();
@@ -31,7 +40,7 @@ GameOverScreen::StatisticWindow::StatisticWindow(ncui::Window statisticWin, cons
 
 void GameOverScreen::StatisticWindow::render() {
     statisticWin_.box();
-    statisticWin_.printAt(1, width_ / 2 - 5, "Statistic:");
+    statisticWin_.printAt(1, width_ / WINDOW_WIDTH_DIVISOR - TITLE_X_OFFSET, "Statistic:");
     statisticWin_.printAt(2, 1, "Score: %d", score_);
     // statisticWin_.printAt(3, 1, "Level: %d", level_);
     statisticWin_.wrefresh();
@@ -46,7 +55,7 @@ GameOverScreen::MenuWindow::MenuWindow(ncui::Window menuWin, GameOverScreen& own
 
 void GameOverScreen::MenuWindow::render() {
     menuWin_.box();
-    menuWin_.printAt(1, width_ / 2 - 5, "Main menu");
+    menuWin_.printAt(1, width_ / WINDOW_WIDTH_DIVISOR - TITLE_X_OFFSET, "Main menu");
     menuWin_.setKeypad(true);
 
     int ch;
