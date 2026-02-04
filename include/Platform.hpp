@@ -38,7 +38,6 @@ private:
     static constexpr int PLATFORM_Y_OFFSET = 3;
     static constexpr int FIELD_CENTER_DIVISOR = 2;
     static constexpr int MOVE_SPEED = 3;
-    static constexpr int BORDER_OFFSET = 1;
 
     int platformWidth_;
     int posY_;

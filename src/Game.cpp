@@ -11,7 +11,7 @@ Game::Game()
       platform_(gameWindow_.gameField()),
       ball_(platform_),
       inputHandler_(field_.fieldWindow()),
-      gameOverScreen_(viewport_, sidePanel_),
+      gameOverScreen_(viewport_), 
       blocks_(field_),
       running_(true),
       lastInput_(0)
@@ -40,7 +40,7 @@ void Game::run() {
             if (frameEndTime < targetFrameDuration)
                 std::this_thread::sleep_for(targetFrameDuration - frameEndTime);
         }
-        gameOverScreen_.render();
+        gameOverScreen_.render(sidePanel_.score());
     }
     while (!gameOverScreen_.isGameOver());
 }

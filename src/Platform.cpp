@@ -17,14 +17,14 @@ void Platform::move(const GameField& field, int dir) {
         case ncui::key::a:
         case ncui::key::A:
             movement_ = Direction::left;
-            posX_ = std::max(BORDER_OFFSET, posX_ - MOVE_SPEED);
+            posX_ = std::max(field.leftPlayableX(), posX_ - MOVE_SPEED);
             break;
             
         case ncui::key::Right:
         case ncui::key::d:
         case ncui::key::D:
             movement_ = Direction::right;
-            posX_ = std::min(field.width() - platformWidth_ - BORDER_OFFSET, posX_ + MOVE_SPEED);
+            posX_ = std::min(field.rightPlayableX() - platformWidth_, posX_ + MOVE_SPEED);
             break;
 
         default:

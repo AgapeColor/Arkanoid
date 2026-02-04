@@ -1,5 +1,4 @@
 #include "../include/SidePanel.hpp"
-#include "../include/ConsoleViewport.hpp"
 
 SidePanel::SidePanel(ncui::Window SidePanelWin) noexcept
     : sidePanelWin_(std::move(SidePanelWin)),

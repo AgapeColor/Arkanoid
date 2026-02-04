@@ -196,7 +196,6 @@ void Ball::checkBlocksCollisions(Blocks& blocks, const DirectionInfo& dir) {
         collisionMask_ |= dir.vertical | dir.horizontal;
         return;
     }
-
     // Vertical collision
     if (vertBlock) {
         blocks.destroyBlock(nextBallPosY, posX_);
@@ -208,3 +207,4 @@ void Ball::checkBlocksCollisions(Blocks& blocks, const DirectionInfo& dir) {
         collisionMask_ |= dir.horizontal;
     }
 }
+

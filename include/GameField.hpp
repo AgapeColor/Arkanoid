@@ -23,6 +23,8 @@ public:
     int width() const noexcept { return width_; };
     const ncui::Window& fieldWindow() const noexcept { return fieldWin_; }
     ncui::cell_t cell(int y, int x) const;
+    int leftPlayableX() const noexcept { return 1; }
+    int rightPlayableX() const noexcept { return width_ - 1;}
     
 private:
     static constexpr int BORDER_WIDTH = 1;

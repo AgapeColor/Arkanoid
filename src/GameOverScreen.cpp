@@ -1,9 +1,8 @@
 #include "../include/GameOverScreen.hpp"
 #include "../include/ConsoleViewport.hpp"
-#include "../include/SidePanel.hpp"
 
 
-GameOverScreen::GameOverScreen(const ConsoleViewport& viewport, const SidePanel& statistic)
+GameOverScreen::GameOverScreen(const ConsoleViewport& viewport)
     : height_(viewport.height()),
       width_(viewport.width()),
       isGameOver_(false),
@@ -11,8 +10,7 @@ GameOverScreen::GameOverScreen(const ConsoleViewport& viewport, const SidePanel&
       statisticWin_(gameOverWin_.derwin(height_ / WINDOW_HEIGHT_DIVISOR,
                                         width_ / WINDOW_WIDTH_DIVISOR - WINDOW_WIDTH_INDENT,
                                         height_ * WINDOW_Y_POSITION,
-                                        (width_ / WINDOW_WIDTH_DIVISOR) - (width_ / WINDOW_WIDTH_DIVISOR - WINDOW_WIDTH_INDENT)),
-                                        statistic),
+                                        (width_ / WINDOW_WIDTH_DIVISOR) - (width_ / WINDOW_WIDTH_DIVISOR - WINDOW_WIDTH_INDENT))),
 
       menuWin_(gameOverWin_.derwin(height_ / WINDOW_HEIGHT_DIVISOR,
                                    width_ / WINDOW_WIDTH_DIVISOR - WINDOW_WIDTH_INDENT,
@@ -21,28 +19,25 @@ GameOverScreen::GameOverScreen(const ConsoleViewport& viewport, const SidePanel&
                                    *this)
 {}
 
-void GameOverScreen::render() {
+void GameOverScreen::render(int score) {
     gameOverWin_.wclear();
     gameOverWin_.box();
     gameOverWin_.printAt(height_ * TITLE_Y_POSITION, width_ / WINDOW_WIDTH_DIVISOR - TITLE_X_OFFSET, "Game Over");
     gameOverWin_.wrefresh();
-    statisticWin_.render();
+    statisticWin_.render(score);
     menuWin_.render();
 }
 
-GameOverScreen::StatisticWindow::StatisticWindow(ncui::Window statisticWin, const SidePanel& statistic)
+GameOverScreen::StatisticWindow::StatisticWindow(ncui::Window statisticWin)
     : statisticWin_(std::move(statisticWin)),
-      height_(statisticWin.height()),
-      width_(statisticWin.width()),
-      score_(statistic.score()),
-      level_(statistic.level())
+      height_(statisticWin_.height()),
+      width_(statisticWin_.width())
 {}
 
-void GameOverScreen::StatisticWindow::render() {
+void GameOverScreen::StatisticWindow::render(int score) {
     statisticWin_.box();
-    statisticWin_.printAt(1, width_ / WINDOW_WIDTH_DIVISOR - TITLE_X_OFFSET, "Statistic:");
-    statisticWin_.printAt(2, 1, "Score: %d", score_);
-    // statisticWin_.printAt(3, 1, "Level: %d", level_);
+    statisticWin_.printAt(1, width_ / WINDOW_WIDTH_DIVISOR - TITLE_X_OFFSET, "Statistic");
+    statisticWin_.printAt(2, 2, "Score: %d", score);
     statisticWin_.wrefresh();
 }
 

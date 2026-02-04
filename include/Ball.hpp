@@ -2,7 +2,6 @@
 
 #include <type_traits>
 #include <chrono>
-#include "NcuiTypes.hpp"
 
 class GameField;
 class Platform;
@@ -62,7 +61,7 @@ private:
         {-1, -1, Collision::top,    Collision::left},  // leftUp
         {-1,  1, Collision::top,    Collision::right}, // rightUp
         { 1, -1, Collision::bottom, Collision::left},  // leftDown
-        { 1,  1, Collision::bottom, Collision::right}  // rightDown
+        { 1,  1, Collision::bottom, Collision::right}, // rightDown
     };
     
     // Main collisions check
@@ -98,7 +97,7 @@ private:
     Direction movement_;
     Collision collisionMask_;
     std::chrono::steady_clock::time_point lastMove_;
-    std::chrono::milliseconds moveInterval_{75};
+    std::chrono::milliseconds moveInterval_{85};
     bool isBallLost_;
 };
 

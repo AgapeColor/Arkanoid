@@ -2,8 +2,6 @@
 
 #include "Window.hpp"
 
-class ConsoleViewport;
-
 class SidePanel {
 public:
     explicit SidePanel(ncui::Window sidePanelWin) noexcept;

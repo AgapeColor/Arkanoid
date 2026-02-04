@@ -3,18 +3,17 @@
 #include "Window.hpp"
 
 class ConsoleViewport;
-class SidePanel;
 
 class GameOverScreen {
 public:
-    explicit GameOverScreen(const ConsoleViewport& viewport, const SidePanel& statistic);
+    explicit GameOverScreen(const ConsoleViewport& viewport);
     GameOverScreen(const GameOverScreen& obj) = delete;
     GameOverScreen& operator=(const GameOverScreen& obj) = delete;
     GameOverScreen(GameOverScreen&& obj) = delete;
     GameOverScreen& operator=(GameOverScreen&& obj) = delete;
     ~GameOverScreen() = default;
 
-    void render();
+    void render(int score);
 
     // Getters
     bool isGameOver() const noexcept { return isGameOver_; }
@@ -22,21 +21,19 @@ public:
 private:
     class StatisticWindow {
     public:
-        StatisticWindow(ncui::Window statisticWin, const SidePanel& statistic);
+        StatisticWindow(ncui::Window statisticWin);
         StatisticWindow(const StatisticWindow& obj) = delete;
         StatisticWindow& operator=(const StatisticWindow& obj) = delete;
         StatisticWindow(StatisticWindow&& obj) = delete;
         StatisticWindow& operator=(StatisticWindow&& obj) = delete;
         ~StatisticWindow() = default;
 
-        void render();
+        void render(int score);
         
     private:
         ncui::Window statisticWin_;
         int height_;
         int width_;
-        int score_;
-        int level_;
     };
 
     class MenuWindow {
