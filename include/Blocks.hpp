@@ -14,13 +14,14 @@ public:
     Blocks& operator=(Blocks&& obj) = delete;
     ~Blocks() = default;
 
+    void render(const GameField& field, const Ball& ball);
     void reset();
+    bool isAllBlocksDestroyed() const noexcept { return destroyedCount_ == generalBlocksAmount_; }
 
     // Getters
-    void render(const GameField& field, const Ball& ball);
     bool isBlock(int y, int x) const;
     void destroyBlock(int y, int x);
-    int destroyedCount() const { return destroyedCount_; }
+    int destroyedCount() const noexcept { return destroyedCount_; }
 
 private:
     static constexpr int SIDE_MARGIN = 3;
@@ -31,4 +32,6 @@ private:
 
     std::vector<std::vector<bool>> blocks_;
     int destroyedCount_;
+    int generalBlocksAmount_;
+    void generateBlocksPattern();
 };

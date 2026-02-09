@@ -31,8 +31,8 @@ public:
 
     // Getters
     bool isBallLost() const noexcept { return isBallLost_; };
-    int posY() const { return posY_; }
-    int posX() const { return posX_; }
+    int posY() const noexcept{ return posY_; }
+    int posX() const noexcept{ return posX_; }
 
 private:
 // Collision detection block
@@ -61,7 +61,7 @@ private:
         {-1, -1, Collision::top,    Collision::left},  // leftUp
         {-1,  1, Collision::top,    Collision::right}, // rightUp
         { 1, -1, Collision::bottom, Collision::left},  // leftDown
-        { 1,  1, Collision::bottom, Collision::right}, // rightDown
+        { 1,  1, Collision::bottom, Collision::right}  // rightDown
     };
     
     // Main collisions check
@@ -97,7 +97,7 @@ private:
     Direction movement_;
     Collision collisionMask_;
     std::chrono::steady_clock::time_point lastMove_;
-    std::chrono::milliseconds moveInterval_{85};
+    std::chrono::milliseconds moveInterval_{105};
     bool isBallLost_;
 };
 

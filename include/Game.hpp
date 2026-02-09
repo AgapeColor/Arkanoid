@@ -9,6 +9,7 @@
 #include "Ball.hpp"
 #include "GameOverScreen.hpp"
 #include "Blocks.hpp"
+#include "GameWinScreen.hpp"
 
 class Game {
 public:
@@ -31,6 +32,7 @@ private:
     InputHandler inputHandler_;
     GameOverScreen gameOverScreen_;
     Blocks blocks_;
+    GameWinScreen gameWinScreen_;
     bool running_;
     int lastInput_;
     void input();

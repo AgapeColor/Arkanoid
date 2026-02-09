@@ -13,6 +13,7 @@ Game::Game()
       inputHandler_(field_.fieldWindow()),
       gameOverScreen_(viewport_), 
       blocks_(field_),
+      gameWinScreen_(viewport_),
       running_(true),
       lastInput_(0)
 {}
@@ -40,9 +41,12 @@ void Game::run() {
             if (frameEndTime < targetFrameDuration)
                 std::this_thread::sleep_for(targetFrameDuration - frameEndTime);
         }
-        gameOverScreen_.render(sidePanel_.score());
+        if (ball_.isBallLost())
+            gameOverScreen_.render(sidePanel_.score());
+        else if (blocks_.isAllBlocksDestroyed())
+            gameWinScreen_.render(sidePanel_.score());
     }
-    while (!gameOverScreen_.isGameOver());
+    while (!gameOverScreen_.isGameOver() && !gameWinScreen_.isGameWin());
 }
 
 void Game::update() {
@@ -50,7 +54,7 @@ void Game::update() {
     ball_.setDirection(field_, platform_, blocks_);
     ball_.move();
     sidePanel_.updateScore(blocks_.destroyedCount());
-    if (ball_.isBallLost())
+    if (ball_.isBallLost() || blocks_.isAllBlocksDestroyed())
         running_ = false;
 }
 
