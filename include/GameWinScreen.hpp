@@ -1,8 +1,10 @@
 #pragma once
 
 #include "Window.hpp"
+#include "MenuWindow.hpp"
 
 class ConsoleViewport;
+class MenuWindow;
 
 class GameWinScreen {
 public:
@@ -16,7 +18,7 @@ public:
     void render(int score);
 
     // Getters
-    bool isGameWin() const noexcept { return isGameWin_; }
+    bool isGameWin() const noexcept { return menuWin_.isRestart(); }
 
 private:
     static constexpr int WINDOW_WIDTH_DIVISOR = 2;
@@ -30,30 +32,8 @@ private:
     static constexpr int SCORE_Y_OFFSET = 10;
     static constexpr int SCORE_X_OFFSET = 4;
 
-    class MenuWindow {
-    public:
-        MenuWindow(ncui::Window menuWin, GameWinScreen& owner);
-        MenuWindow(const MenuWindow& obj) = delete;
-        MenuWindow& operator=(const MenuWindow& obj) = delete;
-        MenuWindow(MenuWindow&& obj) = delete;
-        MenuWindow& operator=(MenuWindow&& obj) = delete;
-        ~MenuWindow() = default;
-        
-        void render();
-
-    private:
-        ncui::Window menuWin_;
-        int height_;
-        int width_;
-        GameWinScreen& owner_;
-        const char* menuItems_[2] = {"Restart", "Exit"};
-        int menuPoints_ = 2;
-        int selectedPoint_ = 0;
-    };
-
     int height_;
     int width_;
-    bool isGameWin_;
     ncui::Window gameWinWin_;
     MenuWindow menuWin_;
 };
