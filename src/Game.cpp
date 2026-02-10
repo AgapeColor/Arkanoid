@@ -52,7 +52,7 @@ void Game::run() {
 void Game::update() {
     platform_.move(field_, lastInput_);
     ball_.setDirection(field_, platform_, blocks_);
-    ball_.move();
+    ball_.move(lastInput_ == ' ');
     sidePanel_.updateScore(blocks_.destroyedCount());
     if (ball_.isBallLost() || blocks_.isAllBlocksDestroyed())
         running_ = false;

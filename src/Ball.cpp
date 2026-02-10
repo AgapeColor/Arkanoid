@@ -81,7 +81,8 @@ void Ball::setDirection(const GameField& field, const Platform& platform, Blocks
     }
 }
 
-void Ball::move() {
+void Ball::move(bool speedBoost) {
+    moveInterval_ = speedBoost ? std::chrono::milliseconds{25} : std::chrono::milliseconds{105};
     auto now = std::chrono::steady_clock::now();
     if (now - lastMove_ < moveInterval_)
         return;

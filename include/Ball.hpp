@@ -25,15 +25,15 @@ public:
     };
     
     void setDirection(const GameField& field, const Platform& platform, Blocks& blocks);
-    void move();
+    void move(bool speedBoost = false);
     void reset(const Platform& platform);
     void render(const GameField& field) const;
 
     // Getters
     bool isBallLost() const noexcept { return isBallLost_; };
-    int posY() const noexcept{ return posY_; }
-    int posX() const noexcept{ return posX_; }
-
+    int posY() const noexcept { return posY_; }
+    int posX() const noexcept { return posX_; }
+    
 private:
 // Collision detection block
     enum class Collision {

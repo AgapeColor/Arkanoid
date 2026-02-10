@@ -59,7 +59,7 @@ void Blocks::generateBlocksPattern() {
 
         for (int row = startRow; row >= endRow; --row) {
             for (int col = startCol; col <= endCol; ++col) {
-                if (row == startRow || row  == endRow || col == startCol || col == endCol) {
+                if (row == startRow || row  == endRow || row == startRow / 2 || col == startCol || col == endCol) {
                     blocks_[row][col] = true;
                     ++generalBlocksAmount_;
                 }
