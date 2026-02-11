@@ -29,10 +29,10 @@ Arkanoid_ncurses — это простая консольная аркада, в
 ## Как собрать и запустить
 
 ```bash
-git clone https://github.com/Xline119/Arkanoid_ncurses.git
-cd Arkanoid_ncurses
+git clone https://github.com/AgapeColor/Arkanoid.git
+cd Arkanoid
 mkdir build && cd build
 cmake ..
 make
 ./arkanoid
-
+```
